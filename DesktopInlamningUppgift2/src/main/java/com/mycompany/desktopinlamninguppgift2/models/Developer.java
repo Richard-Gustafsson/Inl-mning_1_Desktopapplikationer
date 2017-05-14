@@ -10,14 +10,20 @@ package com.mycompany.desktopinlamninguppgift2.models;
  * @author rille
  */
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-public class Developer {
+@Entity
+public class Developer implements Serializable{
     
+    @Id@GeneratedValue
     private int developerId;
     private String developerName;
     @OneToMany(mappedBy ="developer")

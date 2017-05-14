@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package com.mycompany.desktopinlamninguppgift2.resources;
+import com.mycompany.desktopinlamninguppgift2.models.Developer;
+import com.mycompany.desktopinlamninguppgift2.services.DeveloperService;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -23,6 +25,25 @@ import javax.ws.rs.core.MediaType;
 @Path("/developers")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+
 public class DeveloperResource {
+    DeveloperService dr = new DeveloperService();
     
+    @GET
+    public List<Developer> getAllDevelopers() {
+        System.out.println("Kommer in på första.");
+        return dr.getDevelopers();
+        
+    }
+    
+    
+//    @GET
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public String get(){
+//        return "hej";
+//    }
+    @POST
+    public Developer addDeveloper(Developer developer){
+        return dr.addDeveloper(developer);
+    }
 }
