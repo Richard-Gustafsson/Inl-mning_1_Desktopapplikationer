@@ -10,6 +10,11 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -20,6 +25,8 @@ public class ProgramLogic {
     private static ProgramLogic instance; //Step 2 declare the instance variabel
     
     private ObservableList<Developer> obDeveloperList;
+    Client client = ClientBuilder.newClient();
+
     
     
     private ProgramLogic() //Step 1 declare the constructor and change it to private
@@ -41,24 +48,52 @@ public class ProgramLogic {
         return obDeveloperList;
     }
     
+    public void addDeveloper(String n){
+        
+        
+        Developer d = new Developer(); 
+        d.setDeveloperName(n);
+        
+        Developer developer = client.target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(d), Developer.class);
+        
+    }
+    
+    public ObservableList<Developer> getAllDevelopers(){
+        System.out.println("Kommer in för att hämta developers.");
+        List<Developer> tempDeveloperList = client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Developer>>() {});
+        for(Developer d : obDeveloperList){
+            System.out.println(d.getDeveloperName());
+        }
+        
+        for(Developer d : tempDeveloperList){
+            obDeveloperList.addAll(d);
+        }
+        return obDeveloperList;
+    }
+    
     // Lägger till objekt med developers till listan med developers.
     // Finns lite felhantering för att se till att samma namn inte kan finnas för 2 developers eller fler.
-    public boolean setDeveloperList(String n){
-        boolean exists = false;
-        for(Developer d : obDeveloperList){
-            if(d.getDeveloperName().equals(n)){
-                exists = true;
-                break;
-            }
-            else{
-                exists = false;
-            }
-        }
-        if(exists == false){
-            obDeveloperList.add(new Developer(n));
-        }
-        return exists;
-    }
+//    public boolean setDeveloperList(String n){
+//        boolean exists = false;
+//        for(Developer d : obDeveloperList){
+//            if(d.getDeveloperName().equals(n)){
+//                exists = true;
+//                break;
+//            }
+//            else{
+//                exists = false;
+//            }
+//        }
+//        if(exists == false){
+//            obDeveloperList.add(new Developer(n));
+//        }
+//        return exists;
+//    }
     
     // Skriver över arraylistan med spel till en observablelista för att kunna visa objekten i tableview.
     public ObservableList<Game> getDeveloperGameList(){
@@ -82,5 +117,7 @@ public class ProgramLogic {
             }
         }
     }
+    
+    
 
 }

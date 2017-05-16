@@ -84,22 +84,24 @@ public class FXMLDocumentController implements Initializable {
     private void handleDeveloperButtonAction(ActionEvent event){
         getChat(false);
         noMatchLabel.setText("");
-        if(!developerTextField.getText().isEmpty()){    // Felhantering för att se till att man inte kan lägga till en developer utan namn (tom sträng).
-            boolean exist = logic.setDeveloperList(developerTextField.getText());   // Tar in det textvärde som användaren anger och anropar metoden som finns i logic-klassen. Där skapas det nya objektet för en developer.
-        
-            if(exist == true){
-                getChat(true);
-                
-                noMatchLabel.setText("Developer already exists. Try another name.");
-            }
-            else{
-                noMatchLabel.setText("");
-            }
-        }
-        else{
-            getChat(true);
-            noMatchLabel.setText("Developer name can't be empty.");
-        }
+//        if(!developerTextField.getText().isEmpty()){    // Felhantering för att se till att man inte kan lägga till en developer utan namn (tom sträng).
+//            boolean exist = logic.setDeveloperList(developerTextField.getText());   // Tar in det textvärde som användaren anger och anropar metoden som finns i logic-klassen. Där skapas det nya objektet för en developer.
+//        
+//            if(exist == true){
+//                getChat(true);
+//                
+//                noMatchLabel.setText("Developer already exists. Try another name.");
+//            }
+//            else{
+//                noMatchLabel.setText("");
+//            }
+//        }
+//        else{
+//            getChat(true);
+//            noMatchLabel.setText("Developer name can't be empty.");
+//        }
+
+        logic.addDeveloper(developerTextField.getText());
         developerTextField.clear();
     }
     
@@ -548,6 +550,7 @@ public class FXMLDocumentController implements Initializable {
        imageView3.setImage(img5);
          
        developerListView.setItems(logic.getDeveloperList()); // Det första som händer i programmet är att man laddar in en lista med några developers. 
+//        logic.getAllDevelopers();
        
        gameName.setCellFactory(TextFieldTableCell.forTableColumn());
        yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());

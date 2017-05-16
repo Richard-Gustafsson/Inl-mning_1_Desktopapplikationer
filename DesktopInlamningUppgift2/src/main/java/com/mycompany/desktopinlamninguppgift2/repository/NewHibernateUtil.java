@@ -20,6 +20,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 public class NewHibernateUtil {
 
     private static SessionFactory sessionFactory;
+    
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             Configuration configuration = new Configuration().configure();
