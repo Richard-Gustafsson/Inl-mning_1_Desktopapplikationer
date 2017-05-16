@@ -30,15 +30,10 @@ public class Developer implements Serializable{
     @JsonBackReference        
     private List <Game> games;
     
-    
-    
-//    private ArrayList<Game> arrayGameList;
 
-    
     public Developer(int developerId, String developerName){
         this.developerId = developerId;
         this.developerName = developerName;
-//        this.arrayGameList = new ArrayList();
     }
     
     public Developer(){}
@@ -63,17 +58,6 @@ public class Developer implements Serializable{
     public String toString(){
         return developerName;
     }
-    
-//    // Sets an observablelist with game objects that belongs to a specific developer
-//    public void setGameList(int i, String t, String y, String g){
-//        System.out.println("Kommer till setGameList i Developer klass.");
-//        arrayGameList.add(new Game(i,t,y,g));
-//    }
-    
-//    // Returns an observable list with all games for a specific developer
-//    public ArrayList<Game> getGameList(){
-//        return arrayGameList;
-//    }
     
     public List<Game> getGames() {
         return games;

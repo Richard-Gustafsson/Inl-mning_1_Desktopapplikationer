@@ -35,13 +35,6 @@ public class Game implements Serializable{
     @JsonBackReference
     @JsonIgnore
     Developer developer;
-    
-//    public Game(int gameId, String gameName, String yearOfRelease, String genre){
-//        this.gameId = new SimpleIntegerProperty(gameId);
-//        this.gameName = new SimpleStringProperty(gameName);
-//        this.yearOfRelease = new SimpleStringProperty(yearOfRelease);
-//        this.genre = new SimpleStringProperty(genre);
-//    }
 
     public Game(int gameId, String gameName, String yearOfRelease, String genre) {
         this.gameId = gameId;
@@ -50,48 +43,8 @@ public class Game implements Serializable{
         this.genre = genre;
     }
     
-    
-    
     public Game(){}
     
-    
-    
-    
-    
-    
-    
-//    public final int getGameId(){
-//        return gameId.get();
-//    }
-//    
-//    public final void setGameId(int gameId){
-//        this.gameId.set(gameId);
-//    }
-//    
-//    public final String getGameName(){
-//        return gameName.get();
-//    }
-//    
-//    public final String getYearOfRelease(){
-//        return yearOfRelease.get();
-//    }
-//    
-//    public final String getGenre(){
-//        return genre.get();
-//    }
-//    
-//    public final void setGameName(String gameName){
-//        this.gameName.set(gameName);
-//    }
-//    
-//    public final void setYearOfRelease(String yearOfRelease){
-//        this.yearOfRelease.set(yearOfRelease);
-//    }
-//    
-//    public final void setGenre(String genre){
-//        this.genre.set(genre);
-//    }   
-//    
     public void setDeveloper(Developer developer) {
         this.developer = developer;
     }
