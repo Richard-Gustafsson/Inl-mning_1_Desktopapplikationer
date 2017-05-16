@@ -5,10 +5,15 @@
  */
 package com.mycompany.desktopinlamninguppgift2.resources;
 
+import com.mycompany.desktopinlamninguppgift2.services.GameService;
+
 /**
  *
  * @author rille
  */
 public class GameResource {
+    
+    GameService gs = new GameService();
+    
     
 }

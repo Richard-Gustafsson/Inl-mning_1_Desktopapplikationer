@@ -27,23 +27,22 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class DeveloperResource {
-    DeveloperService dr = new DeveloperService();
+    DeveloperService ds = new DeveloperService();
     
     @GET
     public List<Developer> getAllDevelopers() {
         System.out.println("Kommer in på första.");
-        return dr.getDevelopers();
+        return ds.getDevelopers();
         
     }
     
-    
-//    @GET
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public String get(){
-//        return "hej";
-//    }
     @POST
     public Developer addDeveloper(Developer developer){
-        return dr.addDeveloper(developer);
+        return ds.addDeveloper(developer);
+    }
+    
+    @Path("/{gameId}/games")
+    public GameResource getGameResource(){
+        return new GameResource();
     }
 }
