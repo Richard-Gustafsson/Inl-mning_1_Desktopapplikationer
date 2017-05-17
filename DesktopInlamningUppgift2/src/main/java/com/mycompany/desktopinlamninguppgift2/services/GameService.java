@@ -5,10 +5,19 @@
  */
 package com.mycompany.desktopinlamninguppgift2.services;
 
+import com.mycompany.desktopinlamninguppgift2.models.Game;
+import com.mycompany.desktopinlamninguppgift2.repository.GameRepository;
+
 /**
  *
  * @author rille
  */
 public class GameService {
+    GameRepository gameDB = new GameRepository();
     
+    public GameService(){}
+    
+    public Game addGame(int developerId, Game game){
+        return gameDB.addGame(developerId, game);
+    }
 }

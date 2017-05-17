@@ -66,9 +66,6 @@ public class ProgramLogic {
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
                 .request(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<Developer>>() {});
-        for(Developer d : obDeveloperList){
-            System.out.println(d.getDeveloperName());
-        }
         
         for(Developer d : tempDeveloperList){
             obDeveloperList.addAll(d);

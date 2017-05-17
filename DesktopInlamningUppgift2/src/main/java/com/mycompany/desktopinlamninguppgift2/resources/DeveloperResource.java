@@ -41,7 +41,7 @@ public class DeveloperResource {
         return ds.addDeveloper(developer);
     }
     
-    @Path("/{gameId}/games")
+    @Path("/{developerId}/games")
     public GameResource getGameResource(){
         return new GameResource();
     }

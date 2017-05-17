@@ -31,6 +31,7 @@ public class Game implements Serializable{
     private String yearOfRelease;
     private String genre;
     
+    
     @ManyToOne
     @JsonBackReference
     @JsonIgnore
@@ -41,6 +42,7 @@ public class Game implements Serializable{
         this.gameName = gameName;
         this.yearOfRelease = yearOfRelease;
         this.genre = genre;
+       
     }
     
     public Game(){}
