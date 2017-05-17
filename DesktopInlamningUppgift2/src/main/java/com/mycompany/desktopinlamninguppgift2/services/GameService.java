@@ -5,8 +5,11 @@
  */
 package com.mycompany.desktopinlamninguppgift2.services;
 
+import com.mycompany.desktopinlamninguppgift2.models.Developer;
 import com.mycompany.desktopinlamninguppgift2.models.Game;
+import com.mycompany.desktopinlamninguppgift2.repository.DeveloperRepository;
 import com.mycompany.desktopinlamninguppgift2.repository.GameRepository;
+import java.util.List;
 
 /**
  *
@@ -14,10 +17,12 @@ import com.mycompany.desktopinlamninguppgift2.repository.GameRepository;
  */
 public class GameService {
     GameRepository gameDB = new GameRepository();
+    DeveloperRepository developerDB = new DeveloperRepository();
     
     public GameService(){}
     
     public Game addGame(int developerId, Game game){
+        
         return gameDB.addGame(developerId, game);
     }
 }

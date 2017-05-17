@@ -28,4 +28,9 @@ public class DeveloperService {
         return developerDB.addDeveloper(developer);
     }
     
+    public List<Developer> getDeveloper(int developerId){
+        System.out.println("kommer in i getDeveloper i service");
+        return developerDB.getDeveloper(developerId);
+    }
+    
 }

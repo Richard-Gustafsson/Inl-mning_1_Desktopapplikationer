@@ -63,7 +63,7 @@ public class Developer implements Serializable{
         return games;
     }
 
-    public void setPlayers(List<Game> games) {
+    public void setGames(List<Game> games) {
         this.games = games;
     }
     

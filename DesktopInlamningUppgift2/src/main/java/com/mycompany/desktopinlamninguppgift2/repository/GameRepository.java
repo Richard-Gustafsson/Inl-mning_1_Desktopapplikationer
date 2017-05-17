@@ -7,6 +7,7 @@ package com.mycompany.desktopinlamninguppgift2.repository;
 
 import com.mycompany.desktopinlamninguppgift2.models.Developer;
 import com.mycompany.desktopinlamninguppgift2.models.Game;
+import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,27 +17,34 @@ import org.hibernate.Transaction;
  * @author rille
  */
 public class GameRepository {
+        
+        DeveloperRepository developerDB = new DeveloperRepository();
     
         public Game addGame(int developerId, Game game){
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         
         Game myGame = new Game();
-        Developer d = new Developer();
-        Query q = session.createQuery("from Developer where developerId = :id");
-        q.setInteger("id", developerId);
+        List<Developer> devsList = developerDB.getDevelopers();
+//        Developer d = new Developer();
         
+        for(int i = 0; i < devsList.size(); i ++){
+            if(devsList.get(i).getDeveloperId()==developerId){
+//                d = devsList.get(i);
+                myGame.setDeveloper(devsList.get(i));
+            }
+        }
         
         myGame.setGameName(game.getGameName());
         myGame.setGenre(game.getGenre());
         myGame.setYearOfRelease(game.getYearOfRelease());
+//        myGame.setDeveloper(d);
         
-        myGame.setDeveloper();
         session.save(myGame);
         session.getTransaction().commit();
         session.close();
 
-          return myGame; 
+        return myGame; 
         
     }
     

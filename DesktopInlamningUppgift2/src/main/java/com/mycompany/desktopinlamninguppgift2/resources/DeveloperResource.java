@@ -41,8 +41,18 @@ public class DeveloperResource {
         return ds.addDeveloper(developer);
     }
     
+    
+    @GET
+    @Path("/{developerId}")
+    public List<Developer> getDeveloper(@PathParam("developerId") int developerId){
+        System.out.println("kommer in i getDeveloper i resource");
+        return ds.getDeveloper(developerId);
+    }
+    
     @Path("/{developerId}/games")
     public GameResource getGameResource(){
         return new GameResource();
     }
+    
+
 }

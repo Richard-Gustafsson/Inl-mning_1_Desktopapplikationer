@@ -17,13 +17,14 @@ import org.hibernate.Session;
  */
 public class DeveloperRepository {
     
-        public List<Developer> getDevelopers(){
+    public List<Developer> getDevelopers(){
         Session session = NewHibernateUtil.getSession();
-        
         Query query = session.createQuery("from Developer");
         
         List<Developer> developer = query.list();
         System.out.println("Kommer in på tredje.");
+        
+        
         return developer;
     }
         
@@ -34,11 +35,24 @@ public class DeveloperRepository {
         myDev.setDeveloperName(developer.getDeveloperName());
         session.save(myDev);
         List<Game> games=(List<Game>) developer.getGames();
-        myDev.setPlayers(games);
+        myDev.setGames(games);
         session.saveOrUpdate(myDev);
         session.getTransaction().commit();
         session.close();
         
         return myDev;
-    }    
+    }
+    
+    public List<Developer> getDeveloper(int developerId){
+        System.out.println("kommer in i getDeveloper i repository med developerId: " + developerId);
+        Session session = NewHibernateUtil.getSession();
+        
+        Query q = session.createQuery("from Developer where developerId = :id");
+       
+        q.setInteger("id",developerId);
+        
+        List<Developer> devs = q.list();
+        
+        return devs;
+    }
 }
