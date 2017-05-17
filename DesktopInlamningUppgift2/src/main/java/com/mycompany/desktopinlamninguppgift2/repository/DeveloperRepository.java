@@ -6,6 +6,7 @@
 package com.mycompany.desktopinlamninguppgift2.repository;
 
 import com.mycompany.desktopinlamninguppgift2.models.Developer;
+import com.mycompany.desktopinlamninguppgift2.models.Game;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,12 +28,17 @@ public class DeveloperRepository {
     }
         
     public Developer addDeveloper(Developer developer){
-        Session session = NewHibernateUtil.getSessionFactory().openSession();
+        Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
-        session.save(developer);
+        Developer myDev = new Developer();
+        myDev.setDeveloperName(developer.getDeveloperName());
+        session.save(myDev);
+        List<Game> games=(List<Game>) developer.getGames();
+        myDev.setPlayers(games);
+        session.saveOrUpdate(myDev);
         session.getTransaction().commit();
         session.close();
         
-        return developer;
+        return myDev;
     }    
 }

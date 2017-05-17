@@ -550,7 +550,7 @@ public class FXMLDocumentController implements Initializable {
        imageView3.setImage(img5);
          
        developerListView.setItems(logic.getDeveloperList()); // Det första som händer i programmet är att man laddar in en lista med några developers. 
-//        logic.getAllDevelopers();
+       logic.getAllDevelopers();
        
        gameName.setCellFactory(TextFieldTableCell.forTableColumn());
        yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());
