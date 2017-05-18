@@ -12,30 +12,30 @@
 <AnchorPane id="AnchorPane" prefHeight="863.0" prefWidth="911.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktopinlämning1.FXMLDocumentController">
     <children>
         <Button fx:id="developerAddButton" layoutX="85.0" layoutY="742.0" onAction="#handleDeveloperButtonAction" text="Add Developer" />
-      <ListView fx:id="developerListView" layoutX="85.0" layoutY="250.0" onMouseClicked="#handleMouseClick" prefHeight="438.0" prefWidth="291.0" />
+      <ListView fx:id="developerListView" layoutX="85.0" layoutY="250.0" prefHeight="438.0" prefWidth="291.0" />
       <TextField fx:id="developerTextField" layoutX="85.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Developer" />
       <TextField fx:id="gameNameTextField" layoutX="434.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Game title" />
-      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" onAction="#handleGameButtonAction" text="Add Game" />
+      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" text="Add Game" />
       <TableView fx:id="gameTableView" editable="true" layoutX="434.0" layoutY="250.0" prefHeight="438.0" prefWidth="396.0">
         <columns>
-          <TableColumn fx:id="gameName" onEditCommit="#handleEditAction1" prefWidth="131.0" text="Title" />
-          <TableColumn fx:id="yearOfRelease" onEditCommit="#handleEditAction2" prefWidth="122.0" text="Year of release" />
-            <TableColumn fx:id="genre" onEditCommit="#handleEditAction3" prefWidth="142.0" text="Genre" />
+          <TableColumn fx:id="gameName" prefWidth="131.0" text="Title" />
+          <TableColumn fx:id="yearOfRelease" prefWidth="122.0" text="Year of release" />
+            <TableColumn fx:id="genre" prefWidth="142.0" text="Genre" />
         </columns>
       </TableView>
       <TextField fx:id="gameYearOfReleaseTextField" layoutX="434.0" layoutY="739.0" prefHeight="31.0" prefWidth="210.0" promptText="Year of release" />
       <TextField fx:id="gameGenreTextField" layoutX="434.0" layoutY="779.0" prefHeight="31.0" prefWidth="210.0" promptText="Genre" />
       <Button fx:id="developerDeleteButton" layoutX="187.0" layoutY="742.0" mnemonicParsing="false" onAction="#handleDeleteDeveloperButtonAction" text="Delete Developer" />
-      <Button fx:id="gameDeleteButton" layoutX="560.0" layoutY="821.0" mnemonicParsing="false" onAction="#handleDeleteGameButtonAction" text="Delete Game" />
-      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" onAction="#handleEditDeveloperButtonAction" text="Edit Developer" />
+      <Button fx:id="gameDeleteButton" layoutX="560.0" layoutY="821.0" mnemonicParsing="false" text="Delete Game" />
+      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" text="Edit Developer" />
       <TextField fx:id="searchTextField" layoutX="82.0" layoutY="160.0" prefHeight="31.0" prefWidth="210.0" promptText="Search for Developer or Game" />
-      <Button layoutX="83.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleSearchButtonAction" prefHeight="25.0" prefWidth="85.0" text="Search Dev" />
+      <Button layoutX="83.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleSearchDevButtonAction" prefHeight="25.0" prefWidth="85.0" text="Search Dev" />
       <ImageView fx:id="imageView2" fitHeight="141.0" fitWidth="424.0" layoutX="348.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
       <Label fx:id="noMatchLabel" layoutX="384.0" layoutY="109.0" prefHeight="35.0" prefWidth="352.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <Button layoutX="205.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleSearchGameAction" text="Search game" />
+      <Button layoutX="205.0" layoutY="206.0" mnemonicParsing="false" text="Search game" />
       <ImageView fx:id="imageView" fitHeight="132.0" fitWidth="147.0" layoutX="736.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="imageView3" fitHeight="62.0" fitWidth="71.0" layoutX="31.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" rotate="-17.1" />
       <ImageView fx:id="topText" fitHeight="73.0" fitWidth="191.0" layoutX="83.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />

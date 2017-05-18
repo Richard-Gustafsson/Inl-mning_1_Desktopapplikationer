@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
@@ -48,8 +49,13 @@ public class ProgramLogic {
         return obDeveloperList;
     }
     
+    public void setDeveloperList(List<Developer> tempDeveloperList){
+        for(Developer d : tempDeveloperList){
+            obDeveloperList.addAll(d);
+        }
+    }
+    
     public void addDeveloper(String n){
-        
         
         Developer d = new Developer(); 
         d.setDeveloperName(n);
@@ -61,32 +67,49 @@ public class ProgramLogic {
     }
     
     public void deleteDeveloper(String n){
-        int devId = 0;
-        for(Developer d : getAllDevelopers()){
+        Developer tempDev = new Developer();
+        
+        for(Developer d : getDeveloperList()){
             if(d.getDeveloperName()==n){
-                devId = d.g
+                System.out.println("Hittar objektet" + d);
+                tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
+        
+        System.out.println("Får den tag i rätt id: "+tempDev.getDeveloperId());
+        
+        client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId())
+                .request(MediaType.APPLICATION_JSON)
+                .delete();
+               
     }
     
-    public void addGame(String n, String y, String g){
-        
-        
-    }
-    
-    public ObservableList<Developer> getAllDevelopers(){
+    public List<Developer> getAllDevelopers(){
         System.out.println("Kommer in för att hämta developers.");
         List<Developer> tempDeveloperList = client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
                 .request(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<Developer>>() {});
-        client.close();
         
-        for(Developer d : tempDeveloperList){
-            obDeveloperList.addAll(d);
-        }
-        return obDeveloperList;
+        return tempDeveloperList;
+        
     }
+    
+    public List<Developer> getDeveloper(String s){
+        Developer tempDev = new Developer();
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName()==s){
+                System.out.println("Hittar objektet" + d);
+                tempDev.setDeveloperId(d.getDeveloperId());
+            }
+        }
+        
+        
+    }
+    
+   
     
     // Lägger till objekt med developers till listan med developers.
     // Finns lite felhantering för att se till att samma namn inte kan finnas för 2 developers eller fler.
@@ -107,28 +130,18 @@ public class ProgramLogic {
 //        return exists;
 //    }
     
-    // Skriver över arraylistan med spel till en observablelista för att kunna visa objekten i tableview.
-    public ObservableList<Game> getDeveloperGameList(){
-        
-        ObservableList<Game> obGameList = FXCollections.observableArrayList(); 
-        
-        for(Developer d : obDeveloperList){
-            for(Game g: d.getGameList()){
-                obGameList.addAll(d.getGameList());
-            }
-        } 
-        return obGameList;
-    }
+
+
     
-    // Metod som lägger till ett nytt gameobjekt i arraylistan med spel.
-    public void addGameToDeveloper(String x, String n, String y, String g){
-        System.out.println("Kommer till addGameToDeveloper i Logic.");
-        for(Developer d : obDeveloperList){
-            if(d.getDeveloperName().equals(x)){
-                d.setGameList(n, y, g);
-            }
-        }
-    }
+//    // Metod som lägger till ett nytt gameobjekt i arraylistan med spel.
+//    public void addGameToDeveloper(String x, String n, String y, String g){
+//        System.out.println("Kommer till addGameToDeveloper i Logic.");
+//        for(Developer d : obDeveloperList){
+//            if(d.getDeveloperName().equals(x)){
+//                d.setGameList(n, y, g);
+//            }
+//        }
+//    }
     
     
 

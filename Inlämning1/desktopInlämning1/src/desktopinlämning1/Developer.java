@@ -18,17 +18,27 @@ import javafx.collections.ObservableList;
 public class Developer implements Serializable {
     
     
+    private int developerId;
     private String developerName;
     private ArrayList<Game> arrayGameList;
 
     
-    public Developer(String developerName){
+    public Developer(int developerId, String developerName){
+        this.developerId = developerId;
         this.developerName = developerName;
         this.arrayGameList = new ArrayList();
     }
     
     public Developer(){
         
+    }
+    
+    public int getDeveloperId(){
+        return developerId;
+    }
+    
+    public void setDeveloperId(int developerId){
+        this.developerId = developerId;
     }
 
     public String getDeveloperName() {
