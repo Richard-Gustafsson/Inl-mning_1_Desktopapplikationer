@@ -33,4 +33,14 @@ public class DeveloperService {
         return developerDB.getDeveloper(developerId);
     }
     
+    public void updateDeveloper(Developer developer){
+        System.out.println("Kommer in i updateDeveloper i service");
+        developerDB.updateDeveloper(developer);
+    }
+    
+    public void deleteDeveloper(int developerId){
+        System.out.println("KOmmer in i deleteDeveloper i service");
+        developerDB.deleteDeveloper(developerId);
+    }
+    
 }

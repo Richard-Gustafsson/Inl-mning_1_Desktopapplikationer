@@ -46,6 +46,7 @@ public class DeveloperRepository {
     public List<Developer> getDeveloper(int developerId){
         System.out.println("kommer in i getDeveloper i repository med developerId: " + developerId);
         Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
         
         Query q = session.createQuery("from Developer where developerId = :id");
        
@@ -55,4 +56,38 @@ public class DeveloperRepository {
         
         return devs;
     }
+    
+    public void updateDeveloper(Developer developer){
+        System.out.println("Kommer in i updateDeveloper i repository.");
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
+        
+        Query q = session.createQuery("update Developer set developerName = :newName where developerId = :id");
+        q.setParameter("newName", developer.getDeveloperName());
+        q.setInteger("id", developer.getDeveloperId());
+        q.executeUpdate();
+        System.out.println("Kommmer den hit ellelr vadådådådådådå?");
+        session.getTransaction().commit();
+        session.close();
+    }
+    
+    public void deleteDeveloper(int developerId){
+        System.out.println("Kommer in i deleteDeveloper i repository");
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
+        
+        Query query = session.createQuery("delete from Game where developer = :id");
+        query.setInteger("id", developerId);
+        
+        query.executeUpdate();
+        
+        Query q = session.createQuery("delete from Developer where developerId = :id");
+        q.setInteger("id", developerId);
+        
+        q.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+    }
+    
+    
 }

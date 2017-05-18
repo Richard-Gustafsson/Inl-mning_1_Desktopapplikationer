@@ -203,19 +203,22 @@ public class FXMLDocumentController implements Initializable {
         getChat(false);
         noMatchLabel.setText("");
         String x = "";
-        try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
-            x = developerListView.getSelectionModel().getSelectedItem().toString();
-        }catch(Exception e){
-            getChat(true);
-            noMatchLabel.setText("Please select a developer to delete.");
-        }
-        
-        for(Iterator<Developer> iter = logic.getDeveloperList().iterator(); iter.hasNext();){   // Använder en Iterator-loop för att ta bort en developer. Den markerade developern i listview är den developer som vi vill ta bort. 
-            Developer d = iter.next();
-            if(d.getDeveloperName().equals(x)){
-                iter.remove();  // Här raderas det objekt som vi hittar med Iterator-loopen.
-            }
-        } 
+//        try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
+//            x = developerListView.getSelectionModel().getSelectedItem().toString();
+//        }catch(Exception e){
+//            getChat(true);
+//            noMatchLabel.setText("Please select a developer to delete.");
+//        }
+//        
+//        for(Iterator<Developer> iter = logic.getDeveloperList().iterator(); iter.hasNext();){   // Använder en Iterator-loop för att ta bort en developer. Den markerade developern i listview är den developer som vi vill ta bort. 
+//            Developer d = iter.next();
+//            if(d.getDeveloperName().equals(x)){
+//                iter.remove();  // Här raderas det objekt som vi hittar med Iterator-loopen.
+//            }
+//        } 
+        x = developerListView.getSelectionModel().getSelectedItem().toString();
+
+        logic.deleteDeveloper(x);
         gameTableView.getItems().clear(); // Tömmer tableview för att visa att spel-objekten försvinner med developern. 
         
     }

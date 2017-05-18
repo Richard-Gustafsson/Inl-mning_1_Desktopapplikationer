@@ -25,7 +25,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/developers")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
 public class DeveloperResource {
     DeveloperService ds = new DeveloperService();
     
@@ -47,6 +46,22 @@ public class DeveloperResource {
     public List<Developer> getDeveloper(@PathParam("developerId") int developerId){
         System.out.println("kommer in i getDeveloper i resource");
         return ds.getDeveloper(developerId);
+    }
+    
+    @PUT
+    @Path("/{developerId}")
+    public void updateDeveloper(@PathParam("developerId") int developerId, Developer developer){
+        System.out.println("Kommer in i updatedeveloper i resource");
+        developer.setDeveloperId(developerId);
+        ds.updateDeveloper(developer);
+    }
+    
+    @DELETE
+    @Path("/{developerId}")
+    public void deleteDeveloper(@PathParam("developerId") int developerId){
+        System.out.println("KOmmer in i deleteDeveloper i resource");
+        
+        ds.deleteDeveloper(developerId);
     }
     
     @Path("/{developerId}/games")

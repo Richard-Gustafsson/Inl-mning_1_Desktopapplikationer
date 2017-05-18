@@ -60,12 +60,27 @@ public class ProgramLogic {
         
     }
     
+    public void deleteDeveloper(String n){
+        int devId = 0;
+        for(Developer d : getAllDevelopers()){
+            if(d.getDeveloperName()==n){
+                devId = d.g
+            }
+        }
+    }
+    
+    public void addGame(String n, String y, String g){
+        
+        
+    }
+    
     public ObservableList<Developer> getAllDevelopers(){
         System.out.println("Kommer in för att hämta developers.");
         List<Developer> tempDeveloperList = client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
                 .request(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<Developer>>() {});
+        client.close();
         
         for(Developer d : tempDeveloperList){
             obDeveloperList.addAll(d);
