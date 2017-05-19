@@ -6,59 +6,73 @@
 package desktopinlämning1;
 
 import java.io.Serializable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author rille
+ * @author Richard
  */
 public class Game implements Serializable{
     
-    private IntegerProperty gameId;
-    private StringProperty gameName;
-    private StringProperty yearOfRelease;
-    private StringProperty genre;
+    private int gameId;
+    private String gameName;
+    private String yearOfRelease;
+    private String genre;
+//    private List<GameWithProperties> gwpList;
+
+    public Game(int gameId, String gameName, String yearOfRelease, String genre) {
+        this.gameId = gameId;
+        this.gameName = gameName;
+        this.yearOfRelease = yearOfRelease;
+        this.genre = genre;
+//        this.gwpList = new ArrayList();
+    }
     
-    public Game(int gameId, String gameName, String yearOfRelease, String genre){
-        this.gameId = new SimpleIntegerProperty(gameId);
-        this.gameName = new SimpleStringProperty(gameName);
-        this.yearOfRelease = new SimpleStringProperty(yearOfRelease);
-        this.genre = new SimpleStringProperty(genre);
+    public Game(){}
+    
+    public int getGameId() {
+        return gameId;
+    }
+    
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 
-    public final int getGameId() {
-        return gameId.get();
+    public String getGameName() {
+        return gameName;
     }
 
-    public final void setGameId(int gameId) {
-        this.gameId.set(gameId);
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
-    
-    public final String getGameName(){
-        return gameName.get();
-    }
-    
-    public final String getYearOfRelease(){
-        return yearOfRelease.get();
-    }
-    
-    public final String getGenre(){
-        return genre.get();
-    }
-    
-    public final void setGameName(String gameName){
-        this.gameName.set(gameName);
-    }
-    
-    public final void setYearOfRelease(String yearOfRelease){
-        this.yearOfRelease.set(yearOfRelease);
-    }
-    
-    public final void setGenre(String genre){
-        this.genre.set(genre);
-    }    
 
+    public String getYearOfRelease() {
+        return yearOfRelease;
+    }
+
+    public void setYearOfRelease(String yearOfRelease) {
+        this.yearOfRelease = yearOfRelease;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+    
+        
+//    public void setGwpList(int i, String t, String y, String g){
+//        
+//        gwpList.add(new GameWithProperties(i,t,y,g));
+//    }
+//    
+//    
+//    public List<GameWithProperties> getGwpList(){
+//        return gwpList;
+//    }
+    
+    
 }

@@ -12,10 +12,10 @@
 <AnchorPane id="AnchorPane" prefHeight="863.0" prefWidth="911.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktopinlämning1.FXMLDocumentController">
     <children>
         <Button fx:id="developerAddButton" layoutX="85.0" layoutY="742.0" onAction="#handleDeveloperButtonAction" text="Add Developer" />
-      <ListView fx:id="developerListView" layoutX="85.0" layoutY="250.0" prefHeight="438.0" prefWidth="291.0" />
+      <ListView fx:id="developerListView" layoutX="85.0" layoutY="250.0" onMouseClicked="#handleMouseClick" prefHeight="438.0" prefWidth="291.0" />
       <TextField fx:id="developerTextField" layoutX="85.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Developer" />
       <TextField fx:id="gameNameTextField" layoutX="434.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Game title" />
-      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" text="Add Game" />
+      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" onAction="#handleGameButtonAction" text="Add Game" />
       <TableView fx:id="gameTableView" editable="true" layoutX="434.0" layoutY="250.0" prefHeight="438.0" prefWidth="396.0">
         <columns>
           <TableColumn fx:id="gameName" prefWidth="131.0" text="Title" />

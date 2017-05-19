@@ -137,6 +137,60 @@ public class ProgramLogic {
         
     }
     
+    public void addGame(String x, String n, String y, String g){
+        Developer tempDev = new Developer();
+        Game tempGame = new Game();
+        System.out.println("Kommer vi till 1");
+        tempGame.setGameName(n);
+        tempGame.setYearOfRelease(y);
+        tempGame.setGenre(g);
+        System.out.println("Kommer vi till 2");
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName()==x){
+                tempDev.setDeveloperId(d.getDeveloperId());
+            }
+        }
+        System.out.println("Komme vi till 3");
+        client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(tempGame), Game.class);
+        
+    }
+    
+    public List<GameWithProperties> getAllGames(String x){
+        System.out.println("Kommer in i getAllGames i ProgramLogic.");
+        Developer tempDev = new Developer();
+        Game game = new Game();
+        
+        
+        
+        List<GameWithProperties> gwpList = new ArrayList();
+        
+        
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName()==x){
+                tempDev.setDeveloperId(d.getDeveloperId());
+            }
+        }
+        System.out.println("Kommer igenom loopen för att hitta rätt developerId som är: " + tempDev.getDeveloperId());
+        
+        List<Game> games=client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games")
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<List<Game>>(){});
+        
+        for(Game g : games){
+           System.out.println("Går igenom loopen?" + g.getGameId() + g.getGameName() + g.getYearOfRelease() + g.getGenre());
+           gwpList.add(new GameWithProperties(g.getGameId(),g.getGameName(),g.getYearOfRelease(),g.getGenre()));
+        }
+        System.out.println("Kommer ut ur loopen.");
+        
+        return gwpList;
+    }
+    
    
     
     // Lägger till objekt med developers till listan med developers.

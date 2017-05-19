@@ -49,24 +49,24 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private TextField developerTextField;
-//    @FXML
-//    private TextField gameNameTextField;
-//    @FXML
-//    private TextField gameYearOfReleaseTextField;
-//    @FXML
-//    private TextField gameGenreTextField;
+    @FXML
+    private TextField gameNameTextField;
+    @FXML
+    private TextField gameYearOfReleaseTextField;
+    @FXML
+    private TextField gameGenreTextField;
     @FXML
     private TextField searchTextField;
     @FXML
     private ListView developerListView;
-//    @FXML
-//    private TableView<Game> gameTableView;
-//    @FXML
-//    private TableColumn<Game,String> gameName;
-//    @FXML
-//    private TableColumn<Game,String> yearOfRelease;
-//    @FXML
-//    private TableColumn<Game,String> genre;
+    @FXML
+    private TableView<Game> gameTableView;
+    @FXML
+    private TableColumn<GameWithProperties,String> gameName;
+    @FXML
+    private TableColumn<GameWithProperties,String> yearOfRelease;
+    @FXML
+    private TableColumn<GameWithProperties,String> genre;
 //    @FXML
 //    private Label noMatchLabel;
 //    @FXML
@@ -139,6 +139,37 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleGameButtonAction(ActionEvent event){
+        String x = "";
+        try{    
+             x = developerListView.getSelectionModel().getSelectedItem().toString();  
+             
+        }catch(NullPointerException e){
+            
+        }
+        
+        String n = gameNameTextField.getText();
+        String y = gameYearOfReleaseTextField.getText(); // Sätter till "0" för att kunna kolla av med en try-catch.
+        String g = gameGenreTextField.getText();
+        System.out.println("Name: " + n + ", yearOfRelease: " + y + ", genre: " + g);
+        
+        logic.addGame(x, n, y, g);
+        
+    }
+    
+    @FXML
+    private void handleMouseClick(){
+        gameTableView.getItems().clear();
+        String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        
+        System.out.println("Kommer in i handleMouseClick i controller. Hittar: " + x);
+        ObservableList<GameWithProperties> gwpObList = FXCollections.observableArrayList(logic.getAllGames(x));
+        
+        for(GameWithProperties gwp : gwpObList){
+            
+        }
+        
+        System.out.println("Gått bra att lägga till i nya listan med properties.");
+        
         
     }
     
@@ -169,9 +200,9 @@ public class FXMLDocumentController implements Initializable {
        
       
        
-//       gameName.setCellFactory(TextFieldTableCell.forTableColumn());
-//       yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());
-//       genre.setCellFactory(TextFieldTableCell.forTableColumn());
+       gameName.setCellFactory(TextFieldTableCell.forTableColumn());
+       yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());
+       genre.setCellFactory(TextFieldTableCell.forTableColumn());
        
     }    
     
