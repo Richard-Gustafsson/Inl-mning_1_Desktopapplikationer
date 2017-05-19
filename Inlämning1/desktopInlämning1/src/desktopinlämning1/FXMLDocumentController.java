@@ -112,8 +112,37 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleSearchDevButtonAction(ActionEvent event){
         String s = searchTextField.getText(); // Sparar det strängvärde som användaren skriver in, i variabeln s.
+       
+        
+        developerListView.setItems(logic.getDeveloper(s));
+       
+        
+        searchTextField.clear();
+    }
+    
+    @FXML
+    private void handleEditDeveloperButtonAction(ActionEvent event){
+        String x = "";
+        String y = developerTextField.getText();
+        try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
+            x = developerListView.getSelectionModel().getSelectedItem().toString();
+        }catch(Exception e){
+             
+        }
+        
+        logic.updateDeveloper(y, x);
+        developerListView.getItems().clear();
+        logic.setDeveloperList(logic.getAllDevelopers()); 
+        developerListView.setItems(logic.getDeveloperList());
+    
+    }
+    
+    @FXML
+    private void handleGameButtonAction(ActionEvent event){
         
     }
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

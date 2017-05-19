@@ -13,17 +13,27 @@ import java.io.Serializable;
  */
 public class GameServerConnection implements Serializable{
     
+    private int gameId;
     private String gameName;
     private String yearOfRelease;
     private String genre;
 
-    public GameServerConnection(String gameName, String yearOfRelease, String genre) {
+    public GameServerConnection(int gameId, String gameName, String yearOfRelease, String genre) {
+        this.gameId = gameId;
         this.gameName = gameName;
         this.yearOfRelease = yearOfRelease;
         this.genre = genre;
     }
     
     public GameServerConnection(){}
+    
+    public int getGameId() {
+        return gameId;
+    }
+    
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
 
     public String getGameName() {
         return gameName;

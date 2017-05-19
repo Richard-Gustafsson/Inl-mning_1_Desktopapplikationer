@@ -43,7 +43,7 @@ public class DeveloperResource {
     
     @GET
     @Path("/{developerId}")
-    public List<Developer> getDeveloper(@PathParam("developerId") int developerId){
+    public Developer getDeveloper(@PathParam("developerId") int developerId){
         System.out.println("kommer in i getDeveloper i resource");
         return ds.getDeveloper(developerId);
     }

@@ -16,15 +16,25 @@ import javafx.beans.property.StringProperty;
  * @author rille
  */
 public class Game implements Serializable{
-     
+    
+    private IntegerProperty gameId;
     private StringProperty gameName;
     private StringProperty yearOfRelease;
     private StringProperty genre;
     
-    public Game(String gameName, String yearOfRelease, String genre){
+    public Game(int gameId, String gameName, String yearOfRelease, String genre){
+        this.gameId = new SimpleIntegerProperty(gameId);
         this.gameName = new SimpleStringProperty(gameName);
         this.yearOfRelease = new SimpleStringProperty(yearOfRelease);
         this.genre = new SimpleStringProperty(genre);
+    }
+
+    public final int getGameId() {
+        return gameId.get();
+    }
+
+    public final void setGameId(int gameId) {
+        this.gameId.set(gameId);
     }
     
     public final String getGameName(){

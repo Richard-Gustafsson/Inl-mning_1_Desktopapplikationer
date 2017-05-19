@@ -15,7 +15,7 @@
       <ListView fx:id="developerListView" layoutX="85.0" layoutY="250.0" prefHeight="438.0" prefWidth="291.0" />
       <TextField fx:id="developerTextField" layoutX="85.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Developer" />
       <TextField fx:id="gameNameTextField" layoutX="434.0" layoutY="699.0" prefHeight="31.0" prefWidth="210.0" promptText="Game title" />
-      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" text="Add Game" />
+      <Button fx:id="gameAddButton" layoutX="434.0" layoutY="821.0" mnemonicParsing="false" onAction="#handleGameButtonAction" text="Add Game" />
       <TableView fx:id="gameTableView" editable="true" layoutX="434.0" layoutY="250.0" prefHeight="438.0" prefWidth="396.0">
         <columns>
           <TableColumn fx:id="gameName" prefWidth="131.0" text="Title" />
@@ -27,7 +27,7 @@
       <TextField fx:id="gameGenreTextField" layoutX="434.0" layoutY="779.0" prefHeight="31.0" prefWidth="210.0" promptText="Genre" />
       <Button fx:id="developerDeleteButton" layoutX="187.0" layoutY="742.0" mnemonicParsing="false" onAction="#handleDeleteDeveloperButtonAction" text="Delete Developer" />
       <Button fx:id="gameDeleteButton" layoutX="560.0" layoutY="821.0" mnemonicParsing="false" text="Delete Game" />
-      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" text="Edit Developer" />
+      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" onAction="#handleEditDeveloperButtonAction" text="Edit Developer" />
       <TextField fx:id="searchTextField" layoutX="82.0" layoutY="160.0" prefHeight="31.0" prefWidth="210.0" promptText="Search for Developer or Game" />
       <Button layoutX="83.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleSearchDevButtonAction" prefHeight="25.0" prefWidth="85.0" text="Search Dev" />
       <ImageView fx:id="imageView2" fitHeight="141.0" fitWidth="424.0" layoutX="348.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />

@@ -29,7 +29,7 @@ public class GameRepository {
             List<Developer> devsList = developerDB.getDevelopers();
 
 
-            for(int i = 0; i < devsList.size(); i ++){
+            for(int i = 0; i < devsList.size(); i++){
                 if(devsList.get(i).getDeveloperId()==developerId){
 
                     myGame.setDeveloper(devsList.get(i));

@@ -27,9 +27,9 @@
       <TextField fx:id="gameGenreTextField" layoutX="434.0" layoutY="779.0" prefHeight="31.0" prefWidth="210.0" promptText="Genre" />
       <Button fx:id="developerDeleteButton" layoutX="187.0" layoutY="742.0" mnemonicParsing="false" onAction="#handleDeleteDeveloperButtonAction" text="Delete Developer" />
       <Button fx:id="gameDeleteButton" layoutX="560.0" layoutY="821.0" mnemonicParsing="false" text="Delete Game" />
-      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" text="Edit Developer" />
+      <Button layoutX="86.0" layoutY="781.0" mnemonicParsing="false" onAction="#handleEditDeveloperButtonAction" text="Edit Developer" />
       <TextField fx:id="searchTextField" layoutX="82.0" layoutY="160.0" prefHeight="31.0" prefWidth="210.0" promptText="Search for Developer or Game" />
-      <Button layoutX="83.0" layoutY="206.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Search Dev" />
+      <Button layoutX="83.0" layoutY="206.0" mnemonicParsing="false" onAction="#handleSearchDevButtonAction" prefHeight="25.0" prefWidth="85.0" text="Search Dev" />
       <ImageView fx:id="imageView2" fitHeight="141.0" fitWidth="424.0" layoutX="348.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" rotate="180.0" />
       <Label fx:id="noMatchLabel" layoutX="384.0" layoutY="109.0" prefHeight="35.0" prefWidth="352.0">
          <font>

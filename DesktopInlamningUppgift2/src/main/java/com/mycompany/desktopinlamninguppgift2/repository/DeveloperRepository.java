@@ -43,18 +43,16 @@ public class DeveloperRepository {
         return myDev;
     }
     
-    public List<Developer> getDeveloper(int developerId){
+    public Developer getDeveloper(int developerId){
         System.out.println("kommer in i getDeveloper i repository med developerId: " + developerId);
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
+        Developer dev = (Developer) session.get(Developer.class, developerId);
+        System.out.println("Kommer jga hit ellerl aflasflasflasflasflasf");
+
+        session.getTransaction().commit();
         
-        Query q = session.createQuery("from Developer where developerId = :id");
-       
-        q.setInteger("id",developerId);
-        
-        List<Developer> devs = q.list();
-        
-        return devs;
+        return dev;
     }
     
     public void updateDeveloper(Developer developer){

@@ -96,15 +96,43 @@ public class ProgramLogic {
         
     }
     
-    public List<Developer> getDeveloper(String s){
+    public ObservableList<Developer> getDeveloper(String s){
+
         Developer tempDev = new Developer();
-        
+
         for(Developer d : getDeveloperList()){
-            if(d.getDeveloperName()==s){
+            
+            if(d.getDeveloperName().equals(s)){
                 System.out.println("Hittar objektet" + d);
                 tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
+        
+        Developer dev = client 
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId())
+                .request(MediaType.APPLICATION_JSON)
+                .get(Developer.class);
+        
+        
+        obDeveloperList.clear();
+        obDeveloperList.add(dev);
+        return obDeveloperList;
+    }
+    
+    public void updateDeveloper(String n, String o){
+        Developer tempDev = new Developer();
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName().equals(o)){
+                tempDev.setDeveloperId(d.getDeveloperId());
+            }
+        }
+        tempDev.setDeveloperName(n);
+        
+        client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId())
+                .request()
+                .put(Entity.entity(tempDev, MediaType.APPLICATION_JSON));
         
         
     }
