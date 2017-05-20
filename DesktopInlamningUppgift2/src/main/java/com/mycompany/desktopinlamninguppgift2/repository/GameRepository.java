@@ -62,14 +62,18 @@ public class GameRepository {
             return allGames;
         }
         
-        public List<Game> getGame(int gameId){
+        public Game getGame(int gameId){
             Session session = NewHibernateUtil.getSession();
             session.beginTransaction();
             
-            Query q = session.createQuery("from Game where gameId = :id");
-            q.setInteger("id", gameId);
             
-            List<Game> game = q.list();
+            Game game = (Game) session.get(Game.class, gameId);
+            
+            
+//            Query q = session.createQuery("from Game where gameId = :id");
+//            q.setInteger("id", gameId);
+//            
+//            List<Game> game = q.list();
             
             return game;
         }

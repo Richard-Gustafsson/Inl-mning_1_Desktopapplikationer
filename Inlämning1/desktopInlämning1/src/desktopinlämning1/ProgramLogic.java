@@ -25,6 +25,7 @@ public class ProgramLogic {
     
     private static ProgramLogic instance; //Step 2 declare the instance variabel
     
+    private ObservableList<Game> obGameList;
     private ObservableList<Developer> obDeveloperList;
     Client client = ClientBuilder.newClient();
 
@@ -33,6 +34,7 @@ public class ProgramLogic {
     private ProgramLogic() //Step 1 declare the constructor and change it to private
     {
         this.obDeveloperList = FXCollections.observableArrayList();
+        this.obGameList = FXCollections.observableArrayList();
     }
     
     public static ProgramLogic getInstance() //Step 3 write getInstance method
@@ -53,6 +55,17 @@ public class ProgramLogic {
         for(Developer d : tempDeveloperList){
             obDeveloperList.addAll(d);
         }
+    }
+    
+    public void setObGameList(List<Game> gameList){
+        
+        for(Game g: gameList){
+            obGameList.addAll(g);
+        }
+    }
+    
+    public ObservableList<Game> getObGameList(){
+        return obGameList;
     }
     
     public void addDeveloper(String n){
@@ -159,16 +172,10 @@ public class ProgramLogic {
         
     }
     
-    public List<GameWithProperties> getAllGames(String x){
+    public List<Game> getAllGames(String x){
         System.out.println("Kommer in i getAllGames i ProgramLogic.");
         Developer tempDev = new Developer();
         Game game = new Game();
-        
-        
-        
-        List<GameWithProperties> gwpList = new ArrayList();
-        
-        
         
         for(Developer d : getDeveloperList()){
             if(d.getDeveloperName()==x){
@@ -182,49 +189,88 @@ public class ProgramLogic {
                 .request(MediaType.APPLICATION_JSON)
                 .get(new GenericType<List<Game>>(){});
         
-        for(Game g : games){
-           System.out.println("Går igenom loopen?" + g.getGameId() + g.getGameName() + g.getYearOfRelease() + g.getGenre());
-           gwpList.add(new GameWithProperties(g.getGameId(),g.getGameName(),g.getYearOfRelease(),g.getGenre()));
-        }
-        System.out.println("Kommer ut ur loopen.");
-        
-        return gwpList;
+
+        return games;
     }
     
-   
     
-    // Lägger till objekt med developers till listan med developers.
-    // Finns lite felhantering för att se till att samma namn inte kan finnas för 2 developers eller fler.
-//    public boolean setDeveloperList(String n){
-//        boolean exists = false;
-//        for(Developer d : obDeveloperList){
-//            if(d.getDeveloperName().equals(n)){
-//                exists = true;
-//                break;
-//            }
-//            else{
-//                exists = false;
-//            }
-//        }
-//        if(exists == false){
-//            obDeveloperList.add(new Developer(n));
-//        }
-//        return exists;
-//    }
+ 
+    public List<Game> getGame(String s){
+        
+        List<Game> tempGameList = new ArrayList();
+
+        for(Developer d : getDeveloperList()){
+            System.out.println("Letar igenom bland developers och hittar: " + d.getDeveloperName());
+            for(Game g : getAllGames(d.getDeveloperName())){
+                System.out.println("Spel som finns för: " + d.getDeveloperName() + " är: " + g.getGameName());
+                if(g.getGameName().equals(s)){
+                    tempGameList.add(g);
+                    break;
+                }
+            }
+        }
+     return tempGameList;
+    }
+    
+    public void deleteGame(String n, String x){
+        Developer tempDev = new Developer();
+        Game tempGame = new Game();
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName().equals(n)){
+                tempDev = d;
+            }
+        }
+        
+        for(Game g : getAllGames(n)){
+            if(g.getGameName().equals(x)){
+                tempGame = g;
+            }
+        }
+        
+        
+        System.out.println("Den har fått tag i developerId: " + tempDev.getDeveloperId() + " och gameId: " + tempGame.getGameId());
+        
+        client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games/"+tempGame.getGameId())
+                .request(MediaType.APPLICATION_JSON)
+                .delete();
+               
+    }
+    
+    public void updateGame(String devName, String gameName, String oldVal, String newVal){
+        Developer tempDev = new Developer();
+        Game tempGame = new Game();
+        
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName().equals(devName)){
+                tempDev = d;
+            }
+        }
+        
+        for(Game g : getAllGames(devName)){
+            if(g.getGameName().equals(gameName)){
+                tempGame = g;
+            }
+        }
+        if(oldVal == tempGame.getGameName()){
+            tempGame.setGameName(newVal);
+        }
+        else if(oldVal == tempGame.getYearOfRelease()){
+            tempGame.setYearOfRelease(newVal);
+        }
+        else if(oldVal == tempGame.getGenre()){
+            tempGame.setGenre(newVal);
+        }
+        
+        client
+                .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games/"+tempGame.getGameId())
+                .request()
+                .put(Entity.entity(tempGame, MediaType.APPLICATION_JSON));
+        
+        
+    }
     
 
-
-    
-//    // Metod som lägger till ett nytt gameobjekt i arraylistan med spel.
-//    public void addGameToDeveloper(String x, String n, String y, String g){
-//        System.out.println("Kommer till addGameToDeveloper i Logic.");
-//        for(Developer d : obDeveloperList){
-//            if(d.getDeveloperName().equals(x)){
-//                d.setGameList(n, y, g);
-//            }
-//        }
-//    }
-    
-    
 
 }

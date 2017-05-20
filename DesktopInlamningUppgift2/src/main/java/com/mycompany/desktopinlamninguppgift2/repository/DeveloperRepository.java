@@ -48,7 +48,7 @@ public class DeveloperRepository {
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         Developer dev = (Developer) session.get(Developer.class, developerId);
-        System.out.println("Kommer jga hit ellerl aflasflasflasflasflasf");
+        
 
         session.getTransaction().commit();
         
@@ -64,7 +64,7 @@ public class DeveloperRepository {
         q.setParameter("newName", developer.getDeveloperName());
         q.setInteger("id", developer.getDeveloperId());
         q.executeUpdate();
-        System.out.println("Kommmer den hit ellelr vadådådådådådå?");
+        
         session.getTransaction().commit();
         session.close();
     }

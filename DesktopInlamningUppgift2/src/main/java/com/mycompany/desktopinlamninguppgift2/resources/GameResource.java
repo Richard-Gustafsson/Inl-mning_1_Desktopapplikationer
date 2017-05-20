@@ -45,7 +45,7 @@ public class GameResource {
     
     @GET
     @Path("/{gameId}")
-    public List<Game> getGame(@PathParam("gameId") int gameId){
+    public Game getGame(@PathParam("gameId") int gameId){
         System.out.println("Kommer in i getGame i GameResouce");
         return gs.getGame(gameId);
     }
@@ -64,4 +64,5 @@ public class GameResource {
         System.out.println("Kommer in i deleteGame i resource");
         gs.deleteGame(gameId);
     }
+    
 }

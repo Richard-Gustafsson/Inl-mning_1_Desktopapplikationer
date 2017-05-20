@@ -62,11 +62,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableView<Game> gameTableView;
     @FXML
-    private TableColumn<GameWithProperties,String> gameName;
+    private TableColumn<Game,String> gameName;
     @FXML
-    private TableColumn<GameWithProperties,String> yearOfRelease;
+    private TableColumn<Game,String> yearOfRelease;
     @FXML
-    private TableColumn<GameWithProperties,String> genre;
+    private TableColumn<Game,String> genre;
 //    @FXML
 //    private Label noMatchLabel;
 //    @FXML
@@ -153,7 +153,15 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("Name: " + n + ", yearOfRelease: " + y + ", genre: " + g);
         
         logic.addGame(x, n, y, g);
+        logic.setObGameList(logic.getAllGames(x));
+        gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
+        yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
+        genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
+        gameTableView.setItems(logic.getObGameList());
         
+        gameNameTextField.clear();
+        gameYearOfReleaseTextField.clear();
+        gameGenreTextField.clear();
     }
     
     @FXML
@@ -161,18 +169,76 @@ public class FXMLDocumentController implements Initializable {
         gameTableView.getItems().clear();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
         
-        System.out.println("Kommer in i handleMouseClick i controller. Hittar: " + x);
-        ObservableList<GameWithProperties> gwpObList = FXCollections.observableArrayList(logic.getAllGames(x));
+ 
+
+        logic.setObGameList(logic.getAllGames(x));
+        gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
+        yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
+        genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
+        gameTableView.setItems(logic.getObGameList());
+            
+    }
+    
+    @FXML
+    private void handleSearchGameAction(ActionEvent event){
+        String s = searchTextField.getText();
         
-        for(GameWithProperties gwp : gwpObList){
+        
+        gameTableView.getItems().clear();
+        logic.setObGameList(logic.getGame(s));
+        gameTableView.setItems(logic.getObGameList());
+        searchTextField.clear();
+    }
+    
+    @FXML
+    private void handleDeleteGameButtonAction(ActionEvent event){
+        String gameItem = ""; 
+        String x = "";
+        
+        try{
+            x = developerListView.getSelectionModel().getSelectedItem().toString();
+            gameItem = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
+        }catch(Exception e){
             
         }
         
-        System.out.println("Gått bra att lägga till i nya listan med properties.");
-        
-        
+        logic.deleteGame(x, gameItem);
+        gameTableView.getItems().clear();
+        gameTableView.setItems(logic.getObGameList());
     }
     
+   @FXML
+    public void handleEditAction1(CellEditEvent<Game, String> t) {
+        String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
+        String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        
+        ((Game) t.getTableView().getItems().get(
+                t.getTablePosition().getRow())).setGameName(t.getNewValue());
+        
+        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+    }
+    
+    @FXML
+    public void handleEditAction2(CellEditEvent<Game, String> t) {
+        String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
+        String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        
+        ((Game) t.getTableView().getItems().get(
+                t.getTablePosition().getRow())).setYearOfRelease(t.getNewValue());
+        
+        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+    }
+    
+    @FXML
+    public void handleEditAction3(CellEditEvent<Game, String> t) {
+        String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
+        String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        
+        ((Game) t.getTableView().getItems().get(
+                t.getTablePosition().getRow())).setGenre(t.getNewValue());
+        
+        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+    }
     
 
     @Override

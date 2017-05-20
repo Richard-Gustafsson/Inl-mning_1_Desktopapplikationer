@@ -31,7 +31,7 @@ public class GameService {
         return gameDB.getAllGames(developerId);
     }
     
-    public List<Game> getGame(int gameId){
+    public Game getGame(int gameId){
         System.out.println("Kommer in i getGame i GameService");
         return gameDB.getGame(gameId);
     }
@@ -45,4 +45,5 @@ public class GameService {
         System.out.println("Kommer in i deleteGame i service");
         gameDB.deleteGame(gameId);
     }
+    
 }

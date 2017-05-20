@@ -19,14 +19,12 @@ public class Game implements Serializable{
     private String gameName;
     private String yearOfRelease;
     private String genre;
-//    private List<GameWithProperties> gwpList;
 
     public Game(int gameId, String gameName, String yearOfRelease, String genre) {
         this.gameId = gameId;
         this.gameName = gameName;
         this.yearOfRelease = yearOfRelease;
         this.genre = genre;
-//        this.gwpList = new ArrayList();
     }
     
     public Game(){}
@@ -62,17 +60,5 @@ public class Game implements Serializable{
     public void setGenre(String genre) {
         this.genre = genre;
     }
-    
-        
-//    public void setGwpList(int i, String t, String y, String g){
-//        
-//        gwpList.add(new GameWithProperties(i,t,y,g));
-//    }
-//    
-//    
-//    public List<GameWithProperties> getGwpList(){
-//        return gwpList;
-//    }
-    
-    
+ 
 }
