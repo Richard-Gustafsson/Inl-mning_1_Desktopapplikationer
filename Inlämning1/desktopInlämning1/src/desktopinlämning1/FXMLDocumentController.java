@@ -67,42 +67,64 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Game,String> yearOfRelease;
     @FXML
     private TableColumn<Game,String> genre;
-//    @FXML
-//    private Label noMatchLabel;
-//    @FXML
-//    private ImageView imageView;
-//    @FXML
-//    private ImageView imageView2;
-//    @FXML
-//    private ImageView topText;
-//    @FXML
-//    private ImageView bottomText;
-//    @FXML
-//    private ImageView imageView3;
+    @FXML
+    private Label noMatchLabel;
+    @FXML
+    private ImageView imageView;
+    @FXML
+    private ImageView imageView2;
+    @FXML
+    private ImageView topText;
+    @FXML
+    private ImageView bottomText;
+    @FXML
+    private ImageView imageView3;
     
     // Den här metoden lägger till ett developer-objekt i listan med developers.
     @FXML
-    private void handleDeveloperButtonAction(ActionEvent event){
+    private void handleDeveloperButtonAction(ActionEvent event){ 
+        getChat(false);
+        noMatchLabel.setText("");
+        boolean exist = true;
         
-        logic.addDeveloper(developerTextField.getText());
+        if(!developerTextField.getText().isEmpty()){
+            for(Developer d : logic.getDeveloperList()){
+                if(d.getDeveloperName().equals(developerTextField.getText())){
+                    getChat(true);
+                    noMatchLabel.setText("Developer already exists. Try another name.");
+                    exist = true;
+                    break;
+                }
+                else{
+                    exist = false;
+                }
+            }
+            if(exist == false){
+                logic.addDeveloper(developerTextField.getText());
+                
+                developerListView.getItems().clear();
+                logic.setDeveloperList(logic.getAllDevelopers()); 
+                developerListView.setItems(logic.getDeveloperList());
+            }
+        }
+        else{
+            getChat(true);
+            noMatchLabel.setText("Developer name can't be empty."); 
+        }
         developerTextField.clear();
-        developerListView.getItems().clear();
-        logic.setDeveloperList(logic.getAllDevelopers()); 
-        developerListView.setItems(logic.getDeveloperList());
-        
     }
     
     // Med den här metoden så tar vi bort den developern som användaren markerat i listview.
     @FXML
     private void handleDeleteDeveloperButtonAction(ActionEvent event){
-        
+        getChat(false);
+        noMatchLabel.setText("");
         String x = "";
         try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
             x = developerListView.getSelectionModel().getSelectedItem().toString();
         }catch(Exception e){
              
         }
-        System.out.println(x);
         logic.deleteDeveloper(x);
         developerListView.getItems().clear();
         logic.setDeveloperList(logic.getAllDevelopers()); 
@@ -111,12 +133,33 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleSearchDevButtonAction(ActionEvent event){
+        getChat(false);
+        noMatchLabel.setText("");
+        
         String s = searchTextField.getText(); // Sparar det strängvärde som användaren skriver in, i variabeln s.
-       
         
-        developerListView.setItems(logic.getDeveloper(s));
-       
-        
+        if(searchTextField.getText().isEmpty()){
+//            System.out.println("KOmmer inte hit vavavavva?");
+//            developerListView.getItems().clear();
+//            logic.setDeveloperList(logic.getAllDevelopers());
+//            developerListView.setItems(logic.getDeveloperList());
+//            getChat(true);
+//            noMatchLabel.setText("Showing all the developers!");
+        }
+        else{
+            ObservableList list = logic.getDeveloper(s);
+            
+            if(list != null){
+                
+                developerListView.setItems(list);
+                
+            }
+            else{
+                getChat(true);
+                noMatchLabel.setText("Can't find developer.");
+            }
+        }
+
         searchTextField.clear();
     }
     
@@ -254,31 +297,40 @@ public class FXMLDocumentController implements Initializable {
         logic.updateGame(x, y, oldVal, t.getNewValue());
     }
     
+    // Med den här metoden så kan vi slänga ut en pratbubbla på GUI vid de tillfällen där vi vill berätta något för användaren, tex vid felhantering.
+    private void getChat(boolean set){
+        if(set == true){
+        File file = new File("src/desktopinlämning1/pictures/picture.png");
+        Image img2 = new Image(file.toURI().toString());
+        imageView2.setImage(img2);
+        }
+        else{
+            imageView2.setImage(null);
+        } 
+    }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
        
-//       Image img = new Image("http://www.officialpsds.com/images/thumbs/Hello-Kitty-psd26128.png");
-//       imageView.setImage(img);
-//       
-//       File file2 = new File("src/desktopinlämning1/pictures/topText.png");
-//       Image img3 = new Image(file2.toURI().toString());
-//       topText.setImage(img3);
-//       
-//       File file3 = new File("src/desktopinlämning1/pictures/bottomText.png");
-//       Image img4 = new Image(file3.toURI().toString());
-//       bottomText.setImage(img4);
-//       
-//       File file4 = new File("src/desktopinlämning1/pictures/hello-kitty.png");
-//       Image img5 = new Image(file4.toURI().toString());
-//       imageView3.setImage(img5);
+       Image img = new Image("http://www.officialpsds.com/images/thumbs/Hello-Kitty-psd26128.png");
+       imageView.setImage(img);
+       
+       File file2 = new File("src/desktopinlämning1/pictures/topText.png");
+       Image img3 = new Image(file2.toURI().toString());
+       topText.setImage(img3);
+       
+       File file3 = new File("src/desktopinlämning1/pictures/bottomText.png");
+       Image img4 = new Image(file3.toURI().toString());
+       bottomText.setImage(img4);
+       
+       File file4 = new File("src/desktopinlämning1/pictures/hello-kitty.png");
+       Image img5 = new Image(file4.toURI().toString());
+       imageView3.setImage(img5);
        
        logic.setDeveloperList(logic.getAllDevelopers()); 
        developerListView.setItems(logic.getDeveloperList()); // Det första som händer i programmet är att man laddar in en lista med några developers. 
-       
-       
-      
        
        gameName.setCellFactory(TextFieldTableCell.forTableColumn());
        yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());
