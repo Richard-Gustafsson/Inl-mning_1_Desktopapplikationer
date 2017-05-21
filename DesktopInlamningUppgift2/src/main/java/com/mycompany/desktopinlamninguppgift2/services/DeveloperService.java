@@ -19,8 +19,7 @@ public class DeveloperService {
     
     public DeveloperService(){}
     
-    public List<Developer> getDevelopers(){
-        System.out.println("Kommer in på andra.");
+    public List<Developer> getDevelopers(){   
         return developerDB.getDevelopers();
     }
     
@@ -28,19 +27,15 @@ public class DeveloperService {
         return developerDB.addDeveloper(developer);
     }
     
-    public Developer getDeveloper(int developerId){
-        System.out.println("kommer in i getDeveloper i service");
+    public Developer getDeveloper(int developerId){     
         return developerDB.getDeveloper(developerId);
     }
     
     public void updateDeveloper(Developer developer){
-        System.out.println("Kommer in i updateDeveloper i service");
         developerDB.updateDeveloper(developer);
     }
     
     public void deleteDeveloper(int developerId){
-        System.out.println("KOmmer in i deleteDeveloper i service");
         developerDB.deleteDeveloper(developerId);
     }
-    
 }

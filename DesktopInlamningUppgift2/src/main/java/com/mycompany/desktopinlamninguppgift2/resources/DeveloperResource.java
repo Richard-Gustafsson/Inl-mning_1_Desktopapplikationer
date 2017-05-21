@@ -30,9 +30,7 @@ public class DeveloperResource {
     
     @GET
     public List<Developer> getAllDevelopers() {
-        System.out.println("Kommer in på första.");
-        return ds.getDevelopers();
-        
+        return ds.getDevelopers();    
     }
     
     @POST
@@ -40,18 +38,15 @@ public class DeveloperResource {
         return ds.addDeveloper(developer);
     }
     
-    
     @GET
     @Path("/{developerId}")
-    public Developer getDeveloper(@PathParam("developerId") int developerId){
-        System.out.println("kommer in i getDeveloper i resource");
+    public Developer getDeveloper(@PathParam("developerId") int developerId){    
         return ds.getDeveloper(developerId);
     }
     
     @PUT
     @Path("/{developerId}")
     public void updateDeveloper(@PathParam("developerId") int developerId, Developer developer){
-        System.out.println("Kommer in i updatedeveloper i resource");
         developer.setDeveloperId(developerId);
         ds.updateDeveloper(developer);
     }
@@ -59,8 +54,6 @@ public class DeveloperResource {
     @DELETE
     @Path("/{developerId}")
     public void deleteDeveloper(@PathParam("developerId") int developerId){
-        System.out.println("KOmmer in i deleteDeveloper i resource");
-        
         ds.deleteDeveloper(developerId);
     }
     
@@ -68,6 +61,4 @@ public class DeveloperResource {
     public GameResource getGameResource(){
         return new GameResource();
     }
-    
-
 }

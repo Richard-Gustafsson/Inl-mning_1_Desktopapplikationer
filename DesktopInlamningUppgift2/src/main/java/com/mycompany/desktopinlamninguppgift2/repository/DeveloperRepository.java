@@ -17,18 +17,21 @@ import org.hibernate.Session;
  */
 public class DeveloperRepository {
     
+    // Hämtar alla Developers som finns i databasen och sparar i en lista som sedan retuneras till klient. 
     public List<Developer> getDevelopers(){
+        
         Session session = NewHibernateUtil.getSession();
         Query query = session.createQuery("from Developer");
         
         List<Developer> developer = query.list();
-        System.out.println("Kommer in på tredje.");
-        
         
         return developer;
     }
-        
+    
+    // Lägger till ett nytt objekt av Developer i databasen. Varje Developer har ett unikt ID.
+    // Varje Developer har en lista med spel. 
     public Developer addDeveloper(Developer developer){
+        
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         Developer myDev = new Developer();
@@ -43,20 +46,20 @@ public class DeveloperRepository {
         return myDev;
     }
     
+    // Hämtar en Developer med hjälp av Developer-ID.
     public Developer getDeveloper(int developerId){
-        System.out.println("kommer in i getDeveloper i repository med developerId: " + developerId);
+        
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         Developer dev = (Developer) session.get(Developer.class, developerId);
-        
-
         session.getTransaction().commit();
         
         return dev;
     }
     
+    // Metoden tar emot ett Developer-objekt som ersätter det gamla. Detta för namnbyte.
     public void updateDeveloper(Developer developer){
-        System.out.println("Kommer in i updateDeveloper i repository.");
+        
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         
@@ -69,8 +72,11 @@ public class DeveloperRepository {
         session.close();
     }
     
+    // Tar bort det Developer-objekt som man specificerat med hjälp av Developer-ID.
+    // Då programmet inte använder sig utav 'Cascade' i databas, så tar man istället
+    // bort det spel som tillhör Developern först, om denna har Game-objekt.
     public void deleteDeveloper(int developerId){
-        System.out.println("Kommer in i deleteDeveloper i repository");
+        
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
         
@@ -85,7 +91,5 @@ public class DeveloperRepository {
         q.executeUpdate();
         session.getTransaction().commit();
         session.close();
-    }
-    
-    
+    }   
 }

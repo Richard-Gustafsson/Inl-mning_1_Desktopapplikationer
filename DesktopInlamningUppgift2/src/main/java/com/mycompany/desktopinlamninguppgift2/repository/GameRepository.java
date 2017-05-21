@@ -19,92 +19,96 @@ import org.hibernate.Transaction;
  */
 public class GameRepository {
         
-        DeveloperRepository developerDB = new DeveloperRepository();
+    DeveloperRepository developerDB = new DeveloperRepository();
     
-        public Game addGame(int developerId, Game game){
-            Session session = NewHibernateUtil.getSession();
-            session.beginTransaction();
+    // Lägger till ett ny Game-objekt i databasen. Objektet får även det Developer-ID
+    // som visar vilken Developer det tillhör.
+    public Game addGame(int developerId, Game game){
+            
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
 
-            Game myGame = new Game();
-            List<Developer> devsList = developerDB.getDevelopers();
+        Game myGame = new Game();
+        List<Developer> devsList = developerDB.getDevelopers();
 
 
-            for(int i = 0; i < devsList.size(); i++){
-                if(devsList.get(i).getDeveloperId()==developerId){
-
-                    myGame.setDeveloper(devsList.get(i));
-                }
+        for(int i = 0; i < devsList.size(); i++){
+            if(devsList.get(i).getDeveloperId()==developerId){
+                myGame.setDeveloper(devsList.get(i));
             }
+        }
 
-            myGame.setGameName(game.getGameName());
-            myGame.setGenre(game.getGenre());
-            myGame.setYearOfRelease(game.getYearOfRelease());
+        myGame.setGameName(game.getGameName());
+        myGame.setGenre(game.getGenre());
+        myGame.setYearOfRelease(game.getYearOfRelease());
 
 
-            session.save(myGame);
-            session.getTransaction().commit();
-            session.close();
+        session.save(myGame);
+        session.getTransaction().commit();
+        session.close();
 
         return myGame; 
         
     }
+    
+    // Retunerar en lista med alla dem spel som tillhör en viss Developer.
+    public List<Game> getAllGames(int developerId){
         
-        public List<Game> getAllGames(int developerId){
-            System.out.println("Kommer in i getAllGames i GameRepository");
-            Session session = NewHibernateUtil.getSession();
-            session.beginTransaction();
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
             
-            Query q = session.createQuery("from Game where developer = :id");
-            q.setInteger("id", developerId);
+        Query q = session.createQuery("from Game where developer = :id");
+        q.setInteger("id", developerId);
             
-            List<Game> allGames = q.list();
+        List<Game> allGames = q.list();
             
-            return allGames;
-        }
+        return allGames;
         
-        public Game getGame(int gameId){
-            Session session = NewHibernateUtil.getSession();
-            session.beginTransaction();
-            
-            
-            Game game = (Game) session.get(Game.class, gameId);
-            
-            
-//            Query q = session.createQuery("from Game where gameId = :id");
-//            q.setInteger("id", gameId);
-//            
-//            List<Game> game = q.list();
-            
-            return game;
-        }
+    }
+    
+    // Hämtar ett Game-objekt med hjälp av Game-ID.
+    public Game getGame(int gameId){
         
-        public void updateGame(Game game){
-            System.out.println("Kommer in i updateGame i GameRepository");
-            Session session = NewHibernateUtil.getSession();
-            session.beginTransaction();
-            
-            Query q = session.createQuery("update Game set gameName = :newName, yearOfRelease = :newYear, genre = :newGenre where gameid = :id");
-            q.setParameter("newName", game.getGameName());
-            q.setParameter("newYear", game.getYearOfRelease());
-            q.setParameter("newGenre", game.getGenre());
-            q.setInteger("id", game.getGameId());
-            System.out.println("KOmmer jag hit?");
-            q.executeUpdate();
-            System.out.println("Kommer jag hit med?");
-            session.getTransaction().commit();
-            session.close();
-        }
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
+                        
+        Game game = (Game) session.get(Game.class, gameId);
+               
+        return game;
         
-        public void deleteGame(int gameId){
-            System.out.println("KOmmer in i deleteGame i repository");
-            Session session = NewHibernateUtil.getSession();
-            session.beginTransaction();
+    }
+    
+    // Tar in ett nytt Game-objekt som kommer att ersätta det gamla.
+    // Detta kan uppdatera alla de värden objektet har eller bara vissa. 
+    public void updateGame(Game game){
             
-            Query q = session.createQuery("delete from Game where gameID = :id");
-            q.setInteger("id", gameId);
-            q.executeUpdate();
-            session.getTransaction().commit();
-            session.close();
-        }
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
+            
+        Query q = session.createQuery("update Game set gameName = :newName, yearOfRelease = :newYear, genre = :newGenre where gameid = :id");
+        q.setParameter("newName", game.getGameName());
+        q.setParameter("newYear", game.getYearOfRelease());
+        q.setParameter("newGenre", game.getGenre());
+        q.setInteger("id", game.getGameId());
+            
+        q.executeUpdate();
+            
+        session.getTransaction().commit();
+        session.close();
+        
+    }
+    
+    // Tar bort det Game-objekt som man speciferat med hjälp av Game-ID.
+    public void deleteGame(int gameId){
+            
+        Session session = NewHibernateUtil.getSession();
+        session.beginTransaction();
+            
+        Query q = session.createQuery("delete from Game where gameID = :id");
+        q.setInteger("id", gameId);
+        q.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+    }
     
 }

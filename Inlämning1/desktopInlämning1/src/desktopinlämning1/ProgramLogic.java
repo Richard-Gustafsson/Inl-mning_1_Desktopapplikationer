@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
@@ -46,17 +45,20 @@ public class ProgramLogic {
         return instance;
     }
     
+    // Retunerar Observable-listan med Developer-objekt.
     public ObservableList<Developer> getDeveloperList()
     {
         return obDeveloperList;
     }
     
+    // Sätter Observable-listan med Developer-Objekt som kommer in från DB.
     public void setDeveloperList(List<Developer> tempDeveloperList){
         for(Developer d : tempDeveloperList){
             obDeveloperList.addAll(d);
         }
     }
     
+    // Extra metod för att sätta Observable-listan med Game-objekt.
     public void setObGameList(List<Game> gameList){
         
         for(Game g: gameList){
@@ -64,10 +66,14 @@ public class ProgramLogic {
         }
     }
     
+    // Retunerar Observable-listan med Game-objekt.
     public ObservableList<Game> getObGameList(){
         return obGameList;
     }
     
+    /* Metoden får in ett sträng värde från Controller. Skapar ett nytt objekt av typen 
+    Developer och sätter sedan Developer-namnet med sträng värdet. 
+    */
     public void addDeveloper(String n){
         
         Developer d = new Developer(); 
@@ -79,17 +85,17 @@ public class ProgramLogic {
         
     }
     
+    /* Metoden får in ett sträng värde från Controller från en markerad Developer. Skapar ett nytt objekt av typen
+    Developer. Därefter hittas Developerns ID för att kunna ta bort från DB.
+    */
     public void deleteDeveloper(String n){
         Developer tempDev = new Developer();
         
         for(Developer d : getDeveloperList()){
             if(d.getDeveloperName()==n){
-                System.out.println("Hittar objektet" + d);
                 tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
-        
-        System.out.println("Får den tag i rätt id: "+tempDev.getDeveloperId());
         
         client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId())
@@ -98,8 +104,10 @@ public class ProgramLogic {
                
     }
     
+    /* Metoden frågar DB efter alla Developers som finns. Detta retuneras sedan till Klient i form
+    utav en lista. 
+    */
     public List<Developer> getAllDevelopers(){
-        System.out.println("Kommer in för att hämta developers.");
         List<Developer> tempDeveloperList = client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers")
                 .request(MediaType.APPLICATION_JSON)
@@ -109,6 +117,10 @@ public class ProgramLogic {
         
     }
     
+    /* Metoden frågar DB efter en specifik Developer. Detta igenom att med hjälp av
+    sträng värdet från Klient, leta upp det ID som Developern har. Retunerar sedan 
+    en lista för att kunna sätta ListView i klient. 
+    */
     public ObservableList<Developer> getDeveloper(String s){
 
         Developer tempDev = new Developer();
@@ -116,7 +128,6 @@ public class ProgramLogic {
         for(Developer d : getDeveloperList()){
             
             if(d.getDeveloperName().equals(s)){
-                System.out.println("Hittar objektet" + d);
                 tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
@@ -132,6 +143,10 @@ public class ProgramLogic {
         return obDeveloperList;
     }
     
+    /* Metoden tar in två värden, den Developer man vill ändra och det nya värdet för namnet
+    på Developern ifråga. Skapar sedan ett nytt objekt av Developer och sätter det nya värdet när
+    man hittat rätt ID i DB.
+    */
     public void updateDeveloper(String n, String o){
         Developer tempDev = new Developer();
         
@@ -147,24 +162,26 @@ public class ProgramLogic {
                 .request()
                 .put(Entity.entity(tempDev, MediaType.APPLICATION_JSON));
         
-        
     }
     
+    /* Metoden får en värden från klient, vilken Developer som skall få det nya Game-objektet,
+    samt alla de värden som Game-objektet skall ha, som t.ex. namn. Skapar sedan det nya objektet
+    till DB.
+    */
     public void addGame(String x, String n, String y, String g){
         Developer tempDev = new Developer();
         Game tempGame = new Game();
-        System.out.println("Kommer vi till 1");
+        
         tempGame.setGameName(n);
         tempGame.setYearOfRelease(y);
         tempGame.setGenre(g);
-        System.out.println("Kommer vi till 2");
         
         for(Developer d : getDeveloperList()){
             if(d.getDeveloperName()==x){
                 tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
-        System.out.println("Komme vi till 3");
+       
         client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games")
                 .request(MediaType.APPLICATION_JSON)
@@ -172,8 +189,12 @@ public class ProgramLogic {
         
     }
     
+    /* Metoden tar in ett värde från klient, detta värde motsvarar den Developer man klickat på 
+    i listan. Därefter hittas de spel som finns för Developern. Detta retuneras till klient i form
+    utav en lista. 
+    */
     public List<Game> getAllGames(String x){
-        System.out.println("Kommer in i getAllGames i ProgramLogic.");
+       
         Developer tempDev = new Developer();
         Game game = new Game();
         
@@ -182,7 +203,6 @@ public class ProgramLogic {
                 tempDev.setDeveloperId(d.getDeveloperId());
             }
         }
-        System.out.println("Kommer igenom loopen för att hitta rätt developerId som är: " + tempDev.getDeveloperId());
         
         List<Game> games=client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games")
@@ -192,17 +212,17 @@ public class ProgramLogic {
 
         return games;
     }
-    
-    
  
+    /* Metoden tar in ett värde från klient, det värde man sökt efter motsvarar namnet på ett Game-objekt. 
+    Här behövs ingen kontakt med server/DB, då det räcker att gå igenom listorna för alla Developers och deras spel.
+    Detta retuneras sedan i form utav en lista till klient.
+    */
     public List<Game> getGame(String s){
         
         List<Game> tempGameList = new ArrayList();
 
         for(Developer d : getDeveloperList()){
-            System.out.println("Letar igenom bland developers och hittar: " + d.getDeveloperName());
             for(Game g : getAllGames(d.getDeveloperName())){
-                System.out.println("Spel som finns för: " + d.getDeveloperName() + " är: " + g.getGameName());
                 if(g.getGameName().equals(s)){
                     tempGameList.add(g);
                     break;
@@ -212,6 +232,10 @@ public class ProgramLogic {
      return tempGameList;
     }
     
+    /* Metoden hittar det Game-objekt som man vill radera genom att först leta 
+    upp vilken Developer det tillhör och sedan det Game-objekt som det gäller. Tar sedan
+    ID:et för denna för att hitta och radera i DB.
+    */
     public void deleteGame(String n, String x){
         Developer tempDev = new Developer();
         Game tempGame = new Game();
@@ -228,9 +252,6 @@ public class ProgramLogic {
             }
         }
         
-        
-        System.out.println("Den har fått tag i developerId: " + tempDev.getDeveloperId() + " och gameId: " + tempGame.getGameId());
-        
         client
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games/"+tempGame.getGameId())
                 .request(MediaType.APPLICATION_JSON)
@@ -238,7 +259,12 @@ public class ProgramLogic {
                
     }
     
+    /* Metoden får en värden för vilken Developer det är som äger Game-objektet, det markerade
+    Game-objektet, samt de gamla och nya värdet. Med det gamla värdet jämför man sedan vad det är i Game-objektet som
+    användaren vill ändra. När man hittat rätt attribut för Game-objektet så sätter man det nya värdet på rätt plats.
+    */
     public void updateGame(String devName, String gameName, String oldVal, String newVal){
+        
         Developer tempDev = new Developer();
         Game tempGame = new Game();
         
@@ -255,7 +281,6 @@ public class ProgramLogic {
         }
         
         if(tempGame.getGameName().equals(oldVal)){
-            System.out.println("Kommer jag in här.");
             tempGame.setGameName(newVal);
         }
         else if(tempGame.getYearOfRelease().equals(oldVal)){
@@ -269,10 +294,7 @@ public class ProgramLogic {
                 .target("http://localhost:8080/DesktopInlamningUppgift2/webapi/developers/"+tempDev.getDeveloperId()+"/games/"+tempGame.getGameId())
                 .request()
                 .put(Entity.entity(tempGame, MediaType.APPLICATION_JSON));
-        
-        
+            
     }
     
-
-
 }
