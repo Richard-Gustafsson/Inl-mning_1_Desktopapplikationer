@@ -211,33 +211,47 @@ public class FXMLDocumentController implements Initializable {
     public void handleEditAction1(CellEditEvent<Game, String> t) {
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        String oldVal = t.getOldValue();
         
+         
         ((Game) t.getTableView().getItems().get(
                 t.getTablePosition().getRow())).setGameName(t.getNewValue());
         
-        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+       
+        
+        logic.updateGame(x, y, oldVal, t.getNewValue());
     }
     
     @FXML
     public void handleEditAction2(CellEditEvent<Game, String> t) {
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        String oldVal = t.getOldValue();
+        
+        
         
         ((Game) t.getTableView().getItems().get(
                 t.getTablePosition().getRow())).setYearOfRelease(t.getNewValue());
         
-        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+      
+        
+        logic.updateGame(x, y, oldVal, t.getNewValue());
     }
     
     @FXML
     public void handleEditAction3(CellEditEvent<Game, String> t) {
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
+        String oldVal = t.getOldValue();
         
+         
+         
         ((Game) t.getTableView().getItems().get(
                 t.getTablePosition().getRow())).setGenre(t.getNewValue());
         
-        logic.updateGame(x, y, t.getOldValue(), t.getNewValue());
+        
+        
+        logic.updateGame(x, y, oldVal, t.getNewValue());
     }
     
 

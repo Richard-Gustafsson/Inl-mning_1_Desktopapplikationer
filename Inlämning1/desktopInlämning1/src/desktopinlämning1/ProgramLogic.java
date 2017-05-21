@@ -253,13 +253,15 @@ public class ProgramLogic {
                 tempGame = g;
             }
         }
-        if(oldVal == tempGame.getGameName()){
+        
+        if(tempGame.getGameName().equals(oldVal)){
+            System.out.println("Kommer jag in här.");
             tempGame.setGameName(newVal);
         }
-        else if(oldVal == tempGame.getYearOfRelease()){
+        else if(tempGame.getYearOfRelease().equals(oldVal)){
             tempGame.setYearOfRelease(newVal);
         }
-        else if(oldVal == tempGame.getGenre()){
+        else if(tempGame.getGenre().equals(oldVal)){
             tempGame.setGenre(newVal);
         }
         
