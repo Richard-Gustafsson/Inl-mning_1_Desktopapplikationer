@@ -148,13 +148,15 @@ public class FXMLDocumentController implements Initializable {
         }
         else{
             ObservableList list = logic.getDeveloper(s);
+            System.out.println(list.get(0));
             
-            if(list != null){
-                
-                developerListView.setItems(list);
+            
+            if(list.get(0)==null){
+                System.out.println("Det är null");
+//                developerListView.setItems(list);
                 
             }
-            else{
+            else if(list.get(0)!= null){
                 getChat(true);
                 noMatchLabel.setText("Can't find developer.");
             }
