@@ -139,12 +139,11 @@ public class FXMLDocumentController implements Initializable {
         String s = searchTextField.getText(); // Sparar det strängvärde som användaren skriver in, i variabeln s.
         
         if(searchTextField.getText().isEmpty()){
-//            System.out.println("KOmmer inte hit vavavavva?");
-//            developerListView.getItems().clear();
-//            logic.setDeveloperList(logic.getAllDevelopers());
-//            developerListView.setItems(logic.getDeveloperList());
-//            getChat(true);
-//            noMatchLabel.setText("Showing all the developers!");
+            System.out.println("KOmmer inte hit vavavavva?");
+            developerListView.getItems().clear();
+            developerListView.setItems(logic.getDeveloperList());
+            getChat(true);
+            noMatchLabel.setText("Showing all the developers!");
         }
         else{
             ObservableList list = logic.getDeveloper(s);
@@ -153,12 +152,12 @@ public class FXMLDocumentController implements Initializable {
             
             if(list.get(0)==null){
                 System.out.println("Det är null");
-//                developerListView.setItems(list);
-                
-            }
-            else if(list.get(0)!= null){
+                developerListView.setItems(logic.getDeveloperList());
                 getChat(true);
                 noMatchLabel.setText("Can't find developer.");
+            }
+            else if(list.get(0)!= null){
+                developerListView.setItems(list);
             }
         }
 
@@ -169,7 +168,7 @@ public class FXMLDocumentController implements Initializable {
     private void handleEditDeveloperButtonAction(ActionEvent event){
         String x = "";
         String y = developerTextField.getText();
-        try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
+        try{                                                                           
             x = developerListView.getSelectionModel().getSelectedItem().toString();
         }catch(Exception e){
              

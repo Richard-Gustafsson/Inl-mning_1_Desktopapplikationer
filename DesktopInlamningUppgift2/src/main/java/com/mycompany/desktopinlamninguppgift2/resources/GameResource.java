@@ -32,6 +32,7 @@ public class GameResource {
    
     @POST
     public Game addGame(@PathParam("developerId") int developerId, Game game){
+        System.out.println("Kommer in i addGame i resource.");
         return gs.addGame(developerId, game);
     }
     

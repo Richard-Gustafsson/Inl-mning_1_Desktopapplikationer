@@ -24,6 +24,7 @@ public class GameRepository {
     // Lägger till ett ny Game-objekt i databasen. Objektet får även det Developer-ID
     // som visar vilken Developer det tillhör.
     public Game addGame(int developerId, Game game){
+        System.out.println("Kommer in i addGame i GameRepository.");
             
         Session session = NewHibernateUtil.getSession();
         session.beginTransaction();
@@ -34,7 +35,9 @@ public class GameRepository {
 
         for(int i = 0; i < devsList.size(); i++){
             if(devsList.get(i).getDeveloperId()==developerId){
+                System.out.println("Här är developerId: " + devsList.get(i));
                 myGame.setDeveloper(devsList.get(i));
+                System.out.println("KOmmer aldrig hit eller+");
             }
         }
 

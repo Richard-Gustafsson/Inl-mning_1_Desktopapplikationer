@@ -124,7 +124,7 @@ public class ProgramLogic {
     public ObservableList<Developer> getDeveloper(String s){
 
         Developer tempDev = new Developer();
-
+        ObservableList list = FXCollections.observableArrayList();
         for(Developer d : getDeveloperList()){
             
             if(d.getDeveloperName().equals(s)){
@@ -138,9 +138,9 @@ public class ProgramLogic {
                 .get(Developer.class);
         
         
-        obDeveloperList.clear();
-        obDeveloperList.add(dev);
-        return obDeveloperList;
+        list.add(dev);
+        return list;
+
     }
     
     /* Metoden tar in två värden, den Developer man vill ändra och det nya värdet för namnet

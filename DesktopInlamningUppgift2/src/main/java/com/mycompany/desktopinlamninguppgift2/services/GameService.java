@@ -20,6 +20,7 @@ public class GameService {
     public GameService(){}
     
     public Game addGame(int developerId, Game game){
+        System.out.println("Kommer in i addGame i Service");
         return gameDB.addGame(developerId, game);
     }
     
