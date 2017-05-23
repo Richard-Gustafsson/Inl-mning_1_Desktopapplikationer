@@ -21,25 +21,17 @@ import javax.ws.rs.core.MediaType;
  */
 public class BackendCommunicationLogic {
     
-    ProgramLogic logic = ProgramLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i logic-klassen.
-    private static BackendCommunicationLogic instance;
+    
     Client client = ClientBuilder.newClient();
+    ProgramLogic logic = ProgramLogic.getInstance();
     
-    private BackendCommunicationLogic(){}
+    public BackendCommunicationLogic(){}
     
-    public static BackendCommunicationLogic getInstance() //Step 3 write getInstance method
-    {
-        if (instance == null)
-        {
-            instance = new BackendCommunicationLogic();
-        }
-        return instance;
-    }
-    
+
     /* Metoden får in ett sträng värde från Controller. Skapar ett nytt objekt av typen 
     Developer och sätter sedan Developer-namnet med sträng värdet. 
     */
-    public void addDeveloper(String n){
+    public Developer addDeveloper(String n){
         
         Developer d = new Developer(); 
         d.setDeveloperName(n);
@@ -48,6 +40,7 @@ public class BackendCommunicationLogic {
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(d), Developer.class);
         
+        return d;
     }
     
     /* Metoden får in ett sträng värde från Controller från en markerad Developer. Skapar ett nytt objekt av typen
@@ -181,9 +174,9 @@ public class BackendCommunicationLogic {
     Här behövs ingen kontakt med server/DB, då det räcker att gå igenom listorna för alla Developers och deras spel.
     Detta retuneras sedan i form utav en lista till klient.
     */
-    public List<Game> getGame(String s){
+    public ObservableList<Game> getGame(String s){
         
-        List<Game> tempGameList = new ArrayList();
+        ObservableList<Game> tempGameList = FXCollections.observableArrayList();
 
         for(Developer d : logic.getDeveloperList()){
             for(Game g : getAllGames(d.getDeveloperName())){
@@ -193,6 +186,7 @@ public class BackendCommunicationLogic {
                 }
             }
         }
+        
      return tempGameList;
     }
     

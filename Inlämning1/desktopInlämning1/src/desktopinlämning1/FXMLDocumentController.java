@@ -43,10 +43,20 @@ import javax.ws.rs.client.ClientBuilder;
  *
  * @author rille
  */
+/*
+    -------------------LITE KORT DOKUMENTATION--------------------
+    Då det kan anses vara lite dåligt kommenterat för visa metoder 
+    och handleevents i Controller-klassen så har jag skrivit detta.
+    Det som jag lagt mycket fokus på i just denna delen utav programmet
+    är att få till det med felhantering. Programmet skall inte krascha
+    om användaren skulle missklicka eller mata in något felaktigvärde. 
+    Så därför finns det rätt mycket if-else-satser i de olika 
+    metoderna. Det blev även att 
+*/
 public class FXMLDocumentController implements Initializable {
     
     ProgramLogic logic = ProgramLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i logic-klassen.
-    BackendCommunicationLogic backend = BackendCommunicationLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i backend.
+    BackendCommunicationLogic backend = new BackendCommunicationLogic(); // Skapar ett nytt objekt av Backend-klassen som kommunicerar med server.
     
     @FXML
     private TextField developerTextField;
@@ -86,9 +96,9 @@ public class FXMLDocumentController implements Initializable {
     private void handleDeveloperButtonAction(ActionEvent event){ 
         getChat(false);
         noMatchLabel.setText("");
-        boolean exist = true;
+        boolean exist = true; // En extra försäkringar om att Developern inte redan existerar.
         
-        if(!developerTextField.getText().isEmpty()){
+        if(!developerTextField.getText().isEmpty()){ // Kollar så att man inte skickar in en tom sträng som namn.
             for(Developer d : logic.getDeveloperList()){
                 if(d.getDeveloperName().equals(developerTextField.getText())){
                     getChat(true);
@@ -100,11 +110,10 @@ public class FXMLDocumentController implements Initializable {
                     exist = false;
                 }
             }
-            if(exist == false){
-                backend.addDeveloper(developerTextField.getText());
-                developerListView.getItems().clear();
-                logic.setDeveloperList(backend.getAllDevelopers()); 
+            if(exist == false){ // Finns den inte sen tidigare så lägger man till i databasen
+                logic.addDeveloper(backend.addDeveloper(developerTextField.getText()));
                 developerListView.setItems(logic.getDeveloperList());
+                logic.setGameList();
             }
         }
         else{
@@ -124,14 +133,14 @@ public class FXMLDocumentController implements Initializable {
             x = developerListView.getSelectionModel().getSelectedItem().toString();
         }catch(Exception e){
              getChat(true);
-            noMatchLabel.setText("You have to select a develoer to delete.");
+            noMatchLabel.setText("You have to select a developer to delete.");
         }
-        backend.deleteDeveloper(x);
-        developerListView.getItems().clear();
-        logic.setDeveloperList(backend.getAllDevelopers()); 
+        backend.deleteDeveloper(x); // Kallar på metoden i backend och skickar in den Developer vi vill ta bort.
+        developerListView.getItems().remove(developerListView.getSelectionModel().getSelectedItem());
         developerListView.setItems(logic.getDeveloperList());
     }
     
+    // Med den här metoden så kan vi söka efter en developer som finns i en lista.
     @FXML
     private void handleSearchDevButtonAction(ActionEvent event){
         getChat(false);
@@ -139,7 +148,7 @@ public class FXMLDocumentController implements Initializable {
         
         String s = searchTextField.getText(); // Sparar det strängvärde som användaren skriver in, i variabeln s.
         
-        if(searchTextField.getText().isEmpty()){
+        if(searchTextField.getText().isEmpty()){ // Om det är tomt i sökfältet när man klickar "sök" så visas alla developers som finns.
             developerListView.refresh();
             developerListView.setItems(logic.getDeveloperList());
             getChat(true);
@@ -147,7 +156,6 @@ public class FXMLDocumentController implements Initializable {
         }
         else{
             ObservableList list = backend.getDeveloper(s);
-            System.out.println(list.get(0));
             
             if(list.get(0)==null){
                 getChat(true);
@@ -161,10 +169,12 @@ public class FXMLDocumentController implements Initializable {
         searchTextField.clear();
     }
     
+    // Med den här metoden kan man uppdatera ett namn för en Developer i databasen.
     @FXML
     private void handleEditDeveloperButtonAction(ActionEvent event){
         getChat(false);
         noMatchLabel.setText("");
+        boolean exist = false;
         String x = "";
         String y = developerTextField.getText();
         try{                                                                        
@@ -174,24 +184,40 @@ public class FXMLDocumentController implements Initializable {
             noMatchLabel.setText("Select a developer to edit.");
         }
         
-        if(!y.isEmpty()){
-            backend.updateDeveloper(y, x);
+        if(!y.isEmpty()){   // Kollar så att det inte är en tom sträng
+            for(Developer d : logic.getDeveloperList()){
+                if(d.getDeveloperName().equals(y)){ // Finns developern redan så skall det inte gå sätta namnet
+                    exist = true;
+                    break;
+                }
+            }
+            if(exist == false){
+            backend.updateDeveloper(y, x);                      // Uppdaterar listan med developer och spel
             developerListView.getItems().clear();
-            logic.setDeveloperList(backend.getAllDevelopers()); 
+            logic.setDeveloperList(backend.getAllDevelopers());
             developerListView.setItems(logic.getDeveloperList());
+            logic.setGameList();
+            }
+            else{
+                getChat(true);
+                noMatchLabel.setText("That game already exist.");
+            }
         }
         else{
             getChat(true);
             noMatchLabel.setText("Input a new name please.");
         }
-    
+        developerTextField.clear();
     }
     
+    // Med den här metoden kan man lägga till ett nytt Game i databasen.
     @FXML
     private void handleGameButtonAction(ActionEvent event){
         getChat(false);
         noMatchLabel.setText("");
+        boolean exist = false;
         String x = "";
+        
         try{    
              x = developerListView.getSelectionModel().getSelectedItem().toString();   
         }catch(NullPointerException e){
@@ -203,17 +229,33 @@ public class FXMLDocumentController implements Initializable {
             String y = gameYearOfReleaseTextField.getText(); 
             String g = gameGenreTextField.getText();
             
+            // Man ska inte kunna lägga till något spel om något utav inputfälten är tomma.
             if(gameNameTextField.getText().isEmpty() || gameYearOfReleaseTextField.getText().isEmpty() || gameGenreTextField.getText().isEmpty()){
                 getChat(true);
                 noMatchLabel.setText("Can't add game!");
             }
             else{
-                backend.addGame(x, n, y, g);
-                logic.setObGameList(backend.getAllGames(x));
-                gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
-                yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
-                genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
-                gameTableView.setItems(logic.getObGameList());
+                for(Developer d : logic.getDeveloperList()){
+                    for(Game i : d.getGameList()){
+                        if(i.getGameName().equals(n)){
+                            exist = true;
+                            break;
+                        }
+                    }
+                }
+                if(exist == false){
+                    backend.addGame(x, n, y, g); // skickar iväg de värden som behövs till backend för att kunna skapa det nya Game-objektet.
+                    logic.setGameList();
+
+                    gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
+                    yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
+                    genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
+                    gameTableView.setItems(logic.getGameList(x));
+                }
+                else{
+                    getChat(true);
+                    noMatchLabel.setText("That game already exist!");
+                }
             }
         }
         else{
@@ -226,33 +268,56 @@ public class FXMLDocumentController implements Initializable {
         gameGenreTextField.clear();
     }
     
+    // När man klickar på en viss Developer skall dess Games visas om den har några.
     @FXML
     private void handleMouseClick(){
          
         gameTableView.getItems().clear();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
-        
-        logic.setObGameList(backend.getAllGames(x));
+       
+        gameTableView.setItems(logic.getGameList(x)); // Hämtar från den lokala listan med spel.
+       
         gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
         yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
         genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
-        gameTableView.setItems(logic.getObGameList());
-            
+     
     }
     
+    // Med den här metoden kan man söka efter ett Game i databasen.
     @FXML
     private void handleSearchGameAction(ActionEvent event){
+        getChat(false);
+        noMatchLabel.setText("");
         String s = searchTextField.getText();
-        
-        
-        gameTableView.getItems().clear();
-        logic.setObGameList(backend.getGame(s));
-        gameTableView.setItems(logic.getObGameList());
+
+        if(searchTextField.getText().isEmpty()){
+            getChat(true);
+            noMatchLabel.setText("Type in a game to search!");
+        }
+        else{
+            ObservableList list = backend.getGame(s); // Får tillbaka det man sökt efter i form utav en ny lista för att sätta tableview.
+            
+            if(list.isEmpty()){
+                getChat(true);
+                noMatchLabel.setText("Can't find Game.");
+            }
+            else if(!list.isEmpty()){
+                gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
+                yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
+                genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
+                gameTableView.setItems(list);
+            }
+        }
+
         searchTextField.clear();
+ 
     }
     
+    // Med den här metoden kan man radera det spel som man markerat i TableView.
     @FXML
     private void handleDeleteGameButtonAction(ActionEvent event){
+        getChat(false);
+        noMatchLabel.setText("");
         String gameItem = ""; 
         String x = "";
         
@@ -262,27 +327,52 @@ public class FXMLDocumentController implements Initializable {
         }catch(Exception e){
             
         }
-        
-        backend.deleteGame(x, gameItem);
-        gameTableView.getItems().clear();
-        gameTableView.setItems(logic.getObGameList());
+        if(x == ""){ // Inget ska hända om man bara trycker på knappen utav att markerat varken en developer eller spel.
+            getChat(true);
+            noMatchLabel.setText("First select a developer, then game to delete.");
+        }
+        else if(gameItem == ""){
+            getChat(true);
+            noMatchLabel.setText("Select a game to delete.");
+        }else{
+            backend.deleteGame(x, gameItem);
+            logic.setGameList();
+            gameTableView.setItems(logic.getGameList(x));
+        }
     }
-    
+   
+    // Sätter det nya värdet för ett Game-namn
    @FXML
     public void handleEditAction1(CellEditEvent<Game, String> t) {
+        getChat(false);
+        noMatchLabel.setText("");
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
         String oldVal = t.getOldValue();
+        Boolean exist = false;
         
-         
-        ((Game) t.getTableView().getItems().get(
-                t.getTablePosition().getRow())).setGameName(t.getNewValue());
+        for(Developer d : logic.getDeveloperList()){    // Felhantering för att se till att namnet inte redan finns med
+            for(Game g : d.getGameList()){
+                if(g.getGameName().equals(t.getNewValue())){
+                    exist = true;
+                    break;
+                }
+            }
+        }
         
        
-        
-        backend.updateGame(x, y, oldVal, t.getNewValue());
+        if(exist == false){ // Sätter det nya värdet ifall det inte finns sedan tidigare.
+            ((Game) t.getTableView().getItems().get(
+                t.getTablePosition().getRow())).setGameName(t.getNewValue());
+            backend.updateGame(x, y, oldVal, t.getNewValue());
+        }
+        else{
+            getChat(true);
+            noMatchLabel.setText("That game already exist!");
+        }
     }
     
+    // Sätter det nya värdet för Game-Year of Release
     @FXML
     public void handleEditAction2(CellEditEvent<Game, String> t) {
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
@@ -299,6 +389,7 @@ public class FXMLDocumentController implements Initializable {
         backend.updateGame(x, y, oldVal, t.getNewValue());
     }
     
+    // Sätter det nya värdet för en Game-genre
     @FXML
     public void handleEditAction3(CellEditEvent<Game, String> t) {
         String y = gameTableView.getSelectionModel().selectedItemProperty().get().getGameName();
@@ -347,8 +438,9 @@ public class FXMLDocumentController implements Initializable {
        Image img5 = new Image(file4.toURI().toString());
        imageView3.setImage(img5);
        
-       logic.setDeveloperList(backend.getAllDevelopers()); 
-       developerListView.setItems(logic.getDeveloperList()); // Det första som händer i programmet är att man laddar in en lista med några developers. 
+       logic.setDeveloperList(backend.getAllDevelopers());
+       logic.setGameList(); // Sätter spel till alla Developers lokalt.
+       developerListView.setItems(logic.getDeveloperList()); // Sätter lokal Developer lista.
        
        gameName.setCellFactory(TextFieldTableCell.forTableColumn());
        yearOfRelease.setCellFactory(TextFieldTableCell.forTableColumn());

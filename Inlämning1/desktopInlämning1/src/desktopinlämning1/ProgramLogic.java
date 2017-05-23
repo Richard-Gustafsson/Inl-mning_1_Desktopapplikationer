@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 public class ProgramLogic {
     
     private static ProgramLogic instance; //Step 2 declare the instance variabel
+    BackendCommunicationLogic backend;
     
     private ObservableList<Game> obGameList;
     private ObservableList<Developer> obDeveloperList;
@@ -55,17 +56,29 @@ public class ProgramLogic {
         }
     }
     
-    // Extra metod för att sätta Observable-listan med Game-objekt.
-    public void setObGameList(List<Game> gameList){
-        
-        for(Game g: gameList){
-            obGameList.addAll(g);
+    // Lägger till den Developer som retuneras från backend till den lokala listan för developers.
+    public void addDeveloper(Developer developer){
+        obDeveloperList.add(developer);
+    }
+    
+    // Sparar alla dem spel som finns i databasen för respektive developer i en lokal-lista.
+    public void setGameList(){
+        for(Developer d : getDeveloperList()){
+            backend = new BackendCommunicationLogic();
+            d.setGameList(backend.getAllGames(d.getDeveloperName()));
         }
     }
     
-    // Retunerar Observable-listan med Game-objekt.
-    public ObservableList<Game> getObGameList(){
-        return obGameList;
+    // Hämtar de spel som finns för en specifik Developer som man angivit.
+    public ObservableList getGameList(String devName){
+        ObservableList<Game> gameList= FXCollections.observableArrayList();
+        for(Developer d : getDeveloperList()){
+            if(d.getDeveloperName().equals(devName)){
+                gameList.addAll(d.getGameList());
+            }
+        }
+        
+        return gameList;
     }
  
 }

@@ -6,6 +6,10 @@
 package desktopinlämning1;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -16,14 +20,24 @@ public class Developer implements Serializable {
     
     private int developerId;
     private String developerName;
-
+    private List<Game> gameList;
     
     public Developer(int developerId, String developerName){
         this.developerId = developerId;
         this.developerName = developerName;
+//        this.gameList = FXCollections.observableArrayList();
+        this.gameList = new ArrayList();
     }
     
     public Developer(){}
+
+    public List<Game> getGameList() {
+        return gameList;
+    }
+
+    public void setGameList(List<Game> gameList) {
+        this.gameList = gameList;
+    }
     
     public int getDeveloperId(){
         return developerId;
