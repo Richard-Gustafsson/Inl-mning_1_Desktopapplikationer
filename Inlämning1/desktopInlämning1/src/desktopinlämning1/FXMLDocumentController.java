@@ -45,7 +45,8 @@ import javax.ws.rs.client.ClientBuilder;
  */
 public class FXMLDocumentController implements Initializable {
     
-    ProgramLogic logic = ProgramLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i logic-klassen. 
+    ProgramLogic logic = ProgramLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i logic-klassen.
+    BackendCommunicationLogic backend = BackendCommunicationLogic.getInstance(); // Skapar instansen för att nå de metoder som finns i backend.
     
     @FXML
     private TextField developerTextField;
@@ -100,10 +101,9 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
             if(exist == false){
-                logic.addDeveloper(developerTextField.getText());
-                
+                backend.addDeveloper(developerTextField.getText());
                 developerListView.getItems().clear();
-                logic.setDeveloperList(logic.getAllDevelopers()); 
+                logic.setDeveloperList(backend.getAllDevelopers()); 
                 developerListView.setItems(logic.getDeveloperList());
             }
         }
@@ -126,9 +126,9 @@ public class FXMLDocumentController implements Initializable {
              getChat(true);
             noMatchLabel.setText("You have to select a develoer to delete.");
         }
-        logic.deleteDeveloper(x);
+        backend.deleteDeveloper(x);
         developerListView.getItems().clear();
-        logic.setDeveloperList(logic.getAllDevelopers()); 
+        logic.setDeveloperList(backend.getAllDevelopers()); 
         developerListView.setItems(logic.getDeveloperList());
     }
     
@@ -146,7 +146,7 @@ public class FXMLDocumentController implements Initializable {
             noMatchLabel.setText("Showing all the developers!");
         }
         else{
-            ObservableList list = logic.getDeveloper(s);
+            ObservableList list = backend.getDeveloper(s);
             System.out.println(list.get(0));
             
             if(list.get(0)==null){
@@ -175,9 +175,9 @@ public class FXMLDocumentController implements Initializable {
         }
         
         if(!y.isEmpty()){
-            logic.updateDeveloper(y, x);
+            backend.updateDeveloper(y, x);
             developerListView.getItems().clear();
-            logic.setDeveloperList(logic.getAllDevelopers()); 
+            logic.setDeveloperList(backend.getAllDevelopers()); 
             developerListView.setItems(logic.getDeveloperList());
         }
         else{
@@ -208,8 +208,8 @@ public class FXMLDocumentController implements Initializable {
                 noMatchLabel.setText("Can't add game!");
             }
             else{
-                logic.addGame(x, n, y, g);
-                logic.setObGameList(logic.getAllGames(x));
+                backend.addGame(x, n, y, g);
+                logic.setObGameList(backend.getAllGames(x));
                 gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
                 yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
                 genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
@@ -232,7 +232,7 @@ public class FXMLDocumentController implements Initializable {
         gameTableView.getItems().clear();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
         
-        logic.setObGameList(logic.getAllGames(x));
+        logic.setObGameList(backend.getAllGames(x));
         gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
         yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
         genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
@@ -246,7 +246,7 @@ public class FXMLDocumentController implements Initializable {
         
         
         gameTableView.getItems().clear();
-        logic.setObGameList(logic.getGame(s));
+        logic.setObGameList(backend.getGame(s));
         gameTableView.setItems(logic.getObGameList());
         searchTextField.clear();
     }
@@ -263,7 +263,7 @@ public class FXMLDocumentController implements Initializable {
             
         }
         
-        logic.deleteGame(x, gameItem);
+        backend.deleteGame(x, gameItem);
         gameTableView.getItems().clear();
         gameTableView.setItems(logic.getObGameList());
     }
@@ -280,7 +280,7 @@ public class FXMLDocumentController implements Initializable {
         
        
         
-        logic.updateGame(x, y, oldVal, t.getNewValue());
+        backend.updateGame(x, y, oldVal, t.getNewValue());
     }
     
     @FXML
@@ -296,7 +296,7 @@ public class FXMLDocumentController implements Initializable {
         
       
         
-        logic.updateGame(x, y, oldVal, t.getNewValue());
+        backend.updateGame(x, y, oldVal, t.getNewValue());
     }
     
     @FXML
@@ -312,7 +312,7 @@ public class FXMLDocumentController implements Initializable {
         
         
         
-        logic.updateGame(x, y, oldVal, t.getNewValue());
+        backend.updateGame(x, y, oldVal, t.getNewValue());
     }
     
     // Med den här metoden så kan vi slänga ut en pratbubbla på GUI vid de tillfällen där vi vill berätta något för användaren, tex vid felhantering.
@@ -347,7 +347,7 @@ public class FXMLDocumentController implements Initializable {
        Image img5 = new Image(file4.toURI().toString());
        imageView3.setImage(img5);
        
-       logic.setDeveloperList(logic.getAllDevelopers()); 
+       logic.setDeveloperList(backend.getAllDevelopers()); 
        developerListView.setItems(logic.getDeveloperList()); // Det första som händer i programmet är att man laddar in en lista med några developers. 
        
        gameName.setCellFactory(TextFieldTableCell.forTableColumn());
