@@ -123,7 +123,8 @@ public class FXMLDocumentController implements Initializable {
         try{        // Felhantering för att se till att man markerat en developer som man vill ta bort. Programmet ska inte krascha.                                                                    
             x = developerListView.getSelectionModel().getSelectedItem().toString();
         }catch(Exception e){
-             
+             getChat(true);
+            noMatchLabel.setText("You have to select a develoer to delete.");
         }
         logic.deleteDeveloper(x);
         developerListView.getItems().clear();
@@ -139,8 +140,7 @@ public class FXMLDocumentController implements Initializable {
         String s = searchTextField.getText(); // Sparar det strängvärde som användaren skriver in, i variabeln s.
         
         if(searchTextField.getText().isEmpty()){
-            System.out.println("KOmmer inte hit vavavavva?");
-            developerListView.getItems().clear();
+            developerListView.refresh();
             developerListView.setItems(logic.getDeveloperList());
             getChat(true);
             noMatchLabel.setText("Showing all the developers!");
@@ -149,10 +149,7 @@ public class FXMLDocumentController implements Initializable {
             ObservableList list = logic.getDeveloper(s);
             System.out.println(list.get(0));
             
-            
             if(list.get(0)==null){
-                System.out.println("Det är null");
-                developerListView.setItems(logic.getDeveloperList());
                 getChat(true);
                 noMatchLabel.setText("Can't find developer.");
             }
@@ -166,42 +163,63 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleEditDeveloperButtonAction(ActionEvent event){
+        getChat(false);
+        noMatchLabel.setText("");
         String x = "";
         String y = developerTextField.getText();
-        try{                                                                           
+        try{                                                                        
             x = developerListView.getSelectionModel().getSelectedItem().toString();
         }catch(Exception e){
-             
+            getChat(true);
+            noMatchLabel.setText("Select a developer to edit.");
         }
         
-        logic.updateDeveloper(y, x);
-        developerListView.getItems().clear();
-        logic.setDeveloperList(logic.getAllDevelopers()); 
-        developerListView.setItems(logic.getDeveloperList());
+        if(!y.isEmpty()){
+            logic.updateDeveloper(y, x);
+            developerListView.getItems().clear();
+            logic.setDeveloperList(logic.getAllDevelopers()); 
+            developerListView.setItems(logic.getDeveloperList());
+        }
+        else{
+            getChat(true);
+            noMatchLabel.setText("Input a new name please.");
+        }
     
     }
     
     @FXML
     private void handleGameButtonAction(ActionEvent event){
+        getChat(false);
+        noMatchLabel.setText("");
         String x = "";
         try{    
-             x = developerListView.getSelectionModel().getSelectedItem().toString();  
-             
+             x = developerListView.getSelectionModel().getSelectedItem().toString();   
         }catch(NullPointerException e){
             
         }
+        if(x != ""){
         
-        String n = gameNameTextField.getText();
-        String y = gameYearOfReleaseTextField.getText(); // Sätter till "0" för att kunna kolla av med en try-catch.
-        String g = gameGenreTextField.getText();
-        System.out.println("Name: " + n + ", yearOfRelease: " + y + ", genre: " + g);
-        
-        logic.addGame(x, n, y, g);
-        logic.setObGameList(logic.getAllGames(x));
-        gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
-        yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
-        genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
-        gameTableView.setItems(logic.getObGameList());
+            String n = gameNameTextField.getText();
+            String y = gameYearOfReleaseTextField.getText(); 
+            String g = gameGenreTextField.getText();
+            
+            if(gameNameTextField.getText().isEmpty() || gameYearOfReleaseTextField.getText().isEmpty() || gameGenreTextField.getText().isEmpty()){
+                getChat(true);
+                noMatchLabel.setText("Can't add game!");
+            }
+            else{
+                logic.addGame(x, n, y, g);
+                logic.setObGameList(logic.getAllGames(x));
+                gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
+                yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));
+                genre.setCellValueFactory(new PropertyValueFactory<Game,String>("genre"));
+                gameTableView.setItems(logic.getObGameList());
+            }
+        }
+        else{
+            getChat(true);
+            noMatchLabel.setText("Select a developer when adding a game!");
+        }
         
         gameNameTextField.clear();
         gameYearOfReleaseTextField.clear();
@@ -210,11 +228,10 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleMouseClick(){
+         
         gameTableView.getItems().clear();
         String x = developerListView.getSelectionModel().getSelectedItem().toString();
         
- 
-
         logic.setObGameList(logic.getAllGames(x));
         gameName.setCellValueFactory(new PropertyValueFactory<Game,String>("gameName"));    
         yearOfRelease.setCellValueFactory(new PropertyValueFactory<Game,String>("yearOfRelease"));

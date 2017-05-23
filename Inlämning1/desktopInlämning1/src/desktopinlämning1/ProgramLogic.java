@@ -140,7 +140,6 @@ public class ProgramLogic {
         
         list.add(dev);
         return list;
-
     }
     
     /* Metoden tar in två värden, den Developer man vill ändra och det nya värdet för namnet
