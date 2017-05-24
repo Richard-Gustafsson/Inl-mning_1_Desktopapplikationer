@@ -49,9 +49,13 @@ import javax.ws.rs.client.ClientBuilder;
     och handleevents i Controller-klassen så har jag skrivit detta.
     Det som jag lagt mycket fokus på i just denna delen utav programmet
     är att få till det med felhantering. Programmet skall inte krascha
-    om användaren skulle missklicka eller mata in något felaktigvärde. 
+    om användaren skulle missklicka eller mata in något felaktigtvärde. 
     Så därför finns det rätt mycket if-else-satser i de olika 
-    metoderna. Det blev även att 
+    metoderna. Det blev även att jag skrev om programmet efterhand, 
+    då jag beslöt mig för att ha en BackendCommunicationLogic för all
+    serverkommunikation och en ProgramLogic för att kunna spara listor för 
+    spel och utvecklare i lokala listor. Så därför kan jag själv tycka att
+    det ser lite stökigt ut på vissa ställen.
 */
 public class FXMLDocumentController implements Initializable {
     
@@ -93,32 +97,47 @@ public class FXMLDocumentController implements Initializable {
     
     // Den här metoden lägger till ett developer-objekt i listan med developers.
     @FXML
-    private void handleDeveloperButtonAction(ActionEvent event){ 
+    private void handleDeveloperButtonAction(ActionEvent event){
+        
         getChat(false);
         noMatchLabel.setText("");
         boolean exist = true; // En extra försäkringar om att Developern inte redan existerar.
         
         if(!developerTextField.getText().isEmpty()){ // Kollar så att man inte skickar in en tom sträng som namn.
-            for(Developer d : logic.getDeveloperList()){
-                if(d.getDeveloperName().equals(developerTextField.getText())){
-                    getChat(true);
-                    noMatchLabel.setText("Developer already exists. Try another name.");
-                    exist = true;
-                    break;
-                }
-                else{
-                    exist = false;
-                }
-            }
-            if(exist == false){ // Finns den inte sen tidigare så lägger man till i databasen
-                logic.addDeveloper(backend.addDeveloper(developerTextField.getText()));
+            if(logic.getDeveloperList().isEmpty()){
+                backend.addDeveloper(developerTextField.getText());
+                logic.setDeveloperList(backend.getAllDevelopers()); 
                 developerListView.setItems(logic.getDeveloperList());
                 logic.setGameList();
             }
+            else{
+                for(Developer d : logic.getDeveloperList()){
+
+                    if(d.getDeveloperName().equals(developerTextField.getText())){
+
+                        getChat(true);
+                        noMatchLabel.setText("Developer already exists. Try another name.");
+                        exist = true;
+                        break;
+                    }
+                    else{
+
+                        exist = false;
+                    }
+                }
+                if(exist == false){ // Finns den inte sen tidigare så lägger man till i databasen
+                    backend.addDeveloper(developerTextField.getText());
+                    developerListView.getItems().clear();
+                    logic.setDeveloperList(backend.getAllDevelopers());
+                    developerListView.setItems(logic.getDeveloperList());
+                    logic.setGameList();
+                }
+            }
+            
         }
         else{
-            getChat(true);
-            noMatchLabel.setText("Developer name can't be empty."); 
+                getChat(true);
+                noMatchLabel.setText("Developer name can't be empty."); 
         }
         developerTextField.clear();
     }
@@ -244,6 +263,7 @@ public class FXMLDocumentController implements Initializable {
                     }
                 }
                 if(exist == false){
+                    
                     backend.addGame(x, n, y, g); // skickar iväg de värden som behövs till backend för att kunna skapa det nya Game-objektet.
                     logic.setGameList();
 

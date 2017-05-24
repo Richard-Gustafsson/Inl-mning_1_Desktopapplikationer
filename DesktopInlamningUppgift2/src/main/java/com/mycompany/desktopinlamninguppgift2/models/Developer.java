@@ -10,6 +10,7 @@ package com.mycompany.desktopinlamninguppgift2.models;
  * @author rille
  */
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Developer implements Serializable{
     private int developerId;
     private String developerName;
     @OneToMany(mappedBy ="developer")
-    @JsonBackReference        
+    @JsonManagedReference        
     private List <Game> games;
     
 

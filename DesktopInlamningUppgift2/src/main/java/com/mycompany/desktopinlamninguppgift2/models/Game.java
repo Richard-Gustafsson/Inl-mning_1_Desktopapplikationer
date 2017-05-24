@@ -42,7 +42,6 @@ public class Game implements Serializable{
         this.gameName = gameName;
         this.yearOfRelease = yearOfRelease;
         this.genre = genre;
-       
     }
     
     public Game(){}

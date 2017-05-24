@@ -25,13 +25,11 @@ public class ProgramLogic {
     private static ProgramLogic instance; //Step 2 declare the instance variabel
     BackendCommunicationLogic backend;
     
-    private ObservableList<Game> obGameList;
     private ObservableList<Developer> obDeveloperList;
     
     private ProgramLogic() //Step 1 declare the constructor and change it to private
     {
-        this.obDeveloperList = FXCollections.observableArrayList();
-        this.obGameList = FXCollections.observableArrayList();
+        this.obDeveloperList = FXCollections.observableArrayList();    
     }
     
     public static ProgramLogic getInstance() //Step 3 write getInstance method
@@ -56,15 +54,10 @@ public class ProgramLogic {
         }
     }
     
-    // Lägger till den Developer som retuneras från backend till den lokala listan för developers.
-    public void addDeveloper(Developer developer){
-        obDeveloperList.add(developer);
-    }
-    
     // Sparar alla dem spel som finns i databasen för respektive developer i en lokal-lista.
     public void setGameList(){
+        backend = new BackendCommunicationLogic();
         for(Developer d : getDeveloperList()){
-            backend = new BackendCommunicationLogic();
             d.setGameList(backend.getAllGames(d.getDeveloperName()));
         }
     }
